@@ -11,6 +11,6 @@ Feedback on Non-English languages is especially appreciated!
 
 ## Roadmap
 
-- Implement relevant tools from [nlpaug](https://github.com/makcedward/nlpaug).
+- Implement relevant tools from [nlpaug](https://github.com/makcedward/nlpaug) or [typo](https://pypi.org/project/typo/).
 - Implement a Greek character translator.
 
