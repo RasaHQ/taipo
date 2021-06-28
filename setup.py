@@ -4,6 +4,8 @@ from setuptools import setup, find_packages
 base_packages = [
     "rasa>=2.6.0",
     "pandas>=1.0.5",
+    "PyYAML>=5.4.1",
+    "numpy>=1.18.5",
 ]
 
 dev_packages = [
@@ -18,7 +20,6 @@ dev_packages = [
     "mkdocstrings==0.8.0",
     "pymdown-extensions>=7.1",
 ]
-
 
 
 setup(
