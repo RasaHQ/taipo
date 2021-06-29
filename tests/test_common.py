@@ -18,6 +18,11 @@ def test_yaml_both_ways(tmp_path):
     assert len(df_read) == 3
 
 
+def test_nlu_path_to_dataframe():
+    df_read = nlu_path_to_dataframe("tests/data/nlu/nlu.yml")
+    assert len(df_read) == 8
+
+
 @pytest.mark.parametrize(
     "going_in, going_out",
     [
