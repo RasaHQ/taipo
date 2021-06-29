@@ -31,9 +31,9 @@ def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"
     """
     Converts a single DataFrame file with intents into a intents file for Rasa.
     Note that you cannot use this method to add entities.
-    
+
     Usage:
-    
+
     ```python
     import pandas as pd
     from rasa_nlu_examples.scikit import dataframe_to_nlu_file
@@ -44,9 +44,9 @@ def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"
     ])
     dataframe_to_nlu_file(df, write_path="path/to/nlu.yml")
     ```
-    
+
     This will yield a file with the following contents:
-    
+
     ```yaml
     version: 2.0
     nlu:
