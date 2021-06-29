@@ -20,7 +20,7 @@ def csv_to_yml(
         pathlib.Path("."), help="The path of the output file."
     ),
     text_col: str = typer.Option("text", help="Name of the text column."),
-    label_col: str = typer.Option("label", help="Name of the label column."),
+    label_col: str = typer.Option("intent", help="Name of the label column."),
 ):
     """
     Turns a .csv file into nlu.yml for Rasa
