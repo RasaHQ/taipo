@@ -7,7 +7,7 @@ base_packages = [
     "PyYAML>=5.4.1",
     "numpy>=1.18.5",
     "typer==0.3.2",
-    "nlpaug>=1.1.4"
+    "nlpaug>=1.1.4",
 ]
 
 dev_packages = [
