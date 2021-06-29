@@ -12,13 +12,12 @@ runner = CliRunner()
 @pytest.mark.parametrize(
     "path_in,path_out", [("nlu.yml", "nlu.yml"), ("foobar.yml", "foobar.yml")]
 )
-def test_keyboard(tmp_path, path_in, path_out):
+def test_keyboard_augment(tmp_path, path_in, path_out):
     """Ensure basic usage of command works."""
     cmd = [
         "keyboard",
         "augment",
         "tests/data/nlu/nlu.yml",
-        "--out",
         f"{tmp_path}/{path_in}",
     ]
     runner.invoke(app, cmd)
