@@ -5,11 +5,35 @@
 > taipo is a mispelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
 
 This project contains augmentation techniques to aid in the domain of mispellings
-in NLP. In particular it hosts a suite of tools to generate spelling errors for Rasa.
+in NLP. In particular it hosts a suite of tools to generate spelling errors for Rasa NLU files.
 The hope is that algorithms can be trained on these errors and that they become
 more robust as a result.
 
-Feedback on Non-English languages is especially appreciated!
+Feedback on Non-English languages is *especially* appreciated!
+
+## Install
+
+You can install this experiment via pip.
+
+```
+python -m pip install "taipo @ git+https://github.com/RasaHQ/taipo.git"
+```
+
+## Usage
+
+```
+> python -m taipo
+
+  This app generates augmented datasets for Rasa nlu files. The hope is that
+  such datasets can cause the models to train for robustness.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  keyboard  Commands to simulate keyboard typos.
+  util      Some utility commands.
+```
 
 ```
 rasa train nlu --nlu data/nlu-train.yml         # 0.9789016248897846
@@ -28,5 +52,4 @@ rasa test nlu --nlu test/nlu-valid-spelling.yml # 0.8248305843242552
 
 ## Roadmap
 
-- Implement relevant tools from [nlpaug](https://github.com/makcedward/nlpaug) or [typo](https://pypi.org/project/typo/).
-- Implement a Greek character translator.
+- Implement a Greek character translator, [see forum inspiration](https://forum.rasa.com/t/phonetics-featurizer/42132/17).

@@ -11,7 +11,7 @@ from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file
 app = typer.Typer(
     name="augment",
     add_completion=False,
-    help="""These commands augment a single file.""",
+    help="""Commands to simulate keyboard typos.""",
 )
 
 aug = nac.KeyboardAug(
