@@ -6,6 +6,7 @@ base_packages = [
     "pandas>=1.0.5",
     "PyYAML>=5.4.1",
     "numpy>=1.18.5",
+    "typer==0.3.2",
 ]
 
 dev_packages = [
