@@ -44,11 +44,12 @@ def augment(
     Applies typos to an NLU file and saves it to disk.
     """
     dataf = nlu_path_to_dataframe(file)
-    out_path = out / f"{prefix}-{file.parts[-1]}"
+    if out.is_dir():
+        out = out / f"{prefix}-{file.parts[-1]}"
 
     (
         dataf.pipe(add_spelling_errors, aug=aug).pipe(
-            dataframe_to_nlu_file, write_path=out_path, label_col="label"
+            dataframe_to_nlu_file, write_path=out, label_col="label"
         )
     )
 
