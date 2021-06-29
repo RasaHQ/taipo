@@ -1,3 +1,5 @@
+import pathlib
+
 import pytest
 from typer.testing import CliRunner
 
@@ -26,16 +28,12 @@ def test_keyboard(tmp_path, path_in, path_out):
     assert nlu_path_to_dataframe(f"{tmp_path}/{path_out}").shape == expected
 
 
-@pytest.mark.parametrize(
-    "path_in,path_out", [("nlu.yml", "nlu.yml"), ("foobar.yml", "foobar.yml")]
-)
-def test_keyboard_generate(tmp_path, path_in, path_out):
+def test_keyboard_generate():
     """Ensure basic usage of command works."""
-    cmd = [
-        "keyboard",
-        "augment",
-        "tests/data/nlu/nlu.yml",
-    ]
+    cmd = ["keyboard", "generate", "data/nlu-orig.yml", "--prefix", "typod"]
     result = runner.invoke(app, cmd)
     assert result.exit_code == 0
-    assert nlu_path_to_dataframe(f"{tmp_path}/{path_out}").shape == expected
+    assert pathlib.Path("data/nlu-train.yml").exists()
+    assert pathlib.Path("data/typod-nlu-train.yml").exists()
+    assert pathlib.Path("test/nlu-valid.yml").exists()
+    assert pathlib.Path("test/typod-nlu-valid.yml").exists()
