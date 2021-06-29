@@ -29,8 +29,9 @@ def test_keyboard_augment(tmp_path, path_in, path_out):
 def test_keyboard_generate():
     """Ensure basic usage of command works."""
     cmd = ["keyboard", "generate", "data/nlu-orig.yml", "--prefix", "typod"]
-    runner.invoke(app, cmd)
+    res = runner.invoke(app, cmd)
     assert pathlib.Path("data/nlu-train.yml").exists()
     assert pathlib.Path("data/typod-nlu-train.yml").exists()
     assert pathlib.Path("test/nlu-valid.yml").exists()
     assert pathlib.Path("test/typod-nlu-valid.yml").exists()
+    assert res.exit_code == 0

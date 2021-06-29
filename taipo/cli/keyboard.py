@@ -79,21 +79,23 @@ def generate(
     dataf = nlu_path_to_dataframe(file)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        dataf["text"], dataf["label"], test_size=test_size / 100, random_state=seed
+        dataf["text"], dataf["intent"], test_size=test_size / 100, random_state=seed
     )
 
-    df_valid = pd.DataFrame({"text": X_test, "label": y_test}).sort_values(["label"])
-    df_train = pd.DataFrame({"text": X_train, "label": y_train}).sort_values(["label"])
+    df_valid = pd.DataFrame({"text": X_test, "intent": y_test}).sort_values(["intent"])
+    df_train = pd.DataFrame({"text": X_train, "intent": y_train}).sort_values(
+        ["intent"]
+    )
 
     (
         df_train.pipe(
-            dataframe_to_nlu_file, write_path="data/nlu-train.yml", label_col="label"
+            dataframe_to_nlu_file, write_path="data/nlu-train.yml", label_col="intent"
         )
     )
 
     (
         df_valid.pipe(
-            dataframe_to_nlu_file, write_path="test/nlu-valid.yml", label_col="label"
+            dataframe_to_nlu_file, write_path="test/nlu-valid.yml", label_col="intent"
         )
     )
 
@@ -101,7 +103,7 @@ def generate(
         df_train.pipe(add_spelling_errors, aug=aug).pipe(
             dataframe_to_nlu_file,
             write_path=f"data/{prefix}-nlu-train.yml",
-            label_col="label",
+            label_col="intent",
         )
     )
 
@@ -109,6 +111,6 @@ def generate(
         df_valid.pipe(add_spelling_errors, aug=aug).pipe(
             dataframe_to_nlu_file,
             write_path=f"test/{prefix}-nlu-valid.yml",
-            label_col="label",
+            label_col="intent",
         )
     )
