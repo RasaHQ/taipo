@@ -1,7 +1,9 @@
-import yaml
-import json
 import pathlib
+
+import yaml
 import pandas as pd
+from clumper import Clumper
+from parse import compile as parse_compile
 
 
 def nlu_path_to_dataframe(path):
@@ -9,22 +11,24 @@ def nlu_path_to_dataframe(path):
     Converts a single nlu file with intents into a dataframe.
     Usage:
     ```python
-    from rasa_nlu_examples.scikit import nlu_path_to_dataframe
+    from taipo.common import nlu_path_to_dataframe
     df = nlu_path_to_dataframe("path/to/nlu/nlu.yml")
     ```
     """
-    from rasa.nlu.convert import convert_training_data
-
-    data = []
-    p = pathlib.Path(path)
-    name = p.parts[-1]
-    name = name[: name.find(".")]
-    convert_training_data(str(p), f"{name}.json", output_format="json", language="en")
-    blob = json.loads(pathlib.Path(f"{name}.json").read_text())
-    for d in blob["rasa_nlu_data"]["common_examples"]:
-        data.append({"text": d["text"], "label": d["intent"]})
-    pathlib.Path(f"{name}.json").unlink()
-    return pd.DataFrame(data)
+    res = (
+        Clumper.read_yaml(path)
+        .explode("nlu")
+        .mutate(
+            examples=lambda d: d["nlu"]["examples"].split("\n"),
+            intent=lambda d: d["nlu"]["intent"],
+        )
+        .drop("nlu", "version")
+        .explode(text="examples")
+        .mutate(text=lambda d: d["text"][2:])
+        .keep(lambda d: d["text"] != "")
+        .collect()
+    )
+    return pd.DataFrame(res)
 
 
 def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"):
@@ -36,7 +40,7 @@ def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"
 
     ```python
     import pandas as pd
-    from rasa_nlu_examples.scikit import dataframe_to_nlu_file
+    from taipo.common import dataframe_to_nlu_file
     df = pd.DataFrame([
         {"text": "i really really like this", "intent": "positive"},
         {"text": "i enjoy this", "intent": "positive"},
@@ -74,3 +78,23 @@ def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"
         .replace("  -", "   -")
     )
     return pathlib.Path(write_path).write_text(dump)
+
+
+def entity_names(rasa_strings):
+    """
+    Finds all entities in a sequence of Rasa style NLU strings.
+
+    Usage:
+
+    ```python
+    out = entity_names("[python](proglang) and [pandas](package)")
+    assert out == ["proglang", "package"]
+    ```
+    """
+    r = parse_compile("({entity})")
+    results = [list(r.findall(s)) for s in rasa_strings]
+    flat_results = [item for sublist in results for item in sublist]
+    if len(flat_results) == 0:
+        return []
+    uniq = pd.DataFrame([_.named for _ in flat_results])["entity"].unique()
+    return list(uniq)
