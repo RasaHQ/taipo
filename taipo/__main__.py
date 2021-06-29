@@ -1,6 +1,7 @@
 import typer
 
 from taipo.cli.spelling import app as spelling_app
+from taipo.cli.util import app as util_app
 
 
 app = typer.Typer(
@@ -13,6 +14,7 @@ app = typer.Typer(
 )
 
 app.add_typer(spelling_app, name="spelling")
+app.add_typer(util_app, name="util")
 
 if __name__ == "__main__":
     app()

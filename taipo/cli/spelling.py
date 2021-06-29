@@ -35,7 +35,7 @@ def augment(file: pathlib.Path = typer.Argument(..., help="The original nlu.yml 
             out: pathlib.Path = typer.Option(pathlib.Path("."), help="Folder to write misspelled file to"), 
             prefix: str = typer.Option("misspelled")):
     """
-    Applies keyboard typos to an existing NLU file and saves it to disk.
+    Applies typos to an NLU file and saves it to disk.
     """
     dataf = nlu_path_to_dataframe(file)
     out_path = out / f"{prefix}-{file.parts[-1]}"
@@ -46,16 +46,19 @@ def augment(file: pathlib.Path = typer.Argument(..., help="The original nlu.yml 
 
 
 @app.command()
-def generate(file: pathlib.Path, prefix="misspelled"):
+def generate(file: pathlib.Path = typer.Argument(..., help="The original nlu.yml file"), 
+             seed: int = typer.Option(42, help="The seed value to split the data."),
+             test_size: int = typer.Option(33, help="Percentage of data to keep as test data."),
+             prefix: str = typer.Option("misspelled")):
     """
-    Generate train/validation with/without misspelling for a Rasa project. 
+    Generate train/validation data with/without misspelling. 
 
     Will also generate files for the `/test` directory.
     """
     dataf = nlu_path_to_dataframe(file)
     
     X_train, X_test, y_train, y_test = train_test_split(dataf['text'], dataf['label'], 
-                                                    test_size=0.33, random_state=42)
+                                                        test_size=test_size/100, random_state=seed)
 
     df_valid = pd.DataFrame({'text': X_test, 'label': y_test}).sort_values(['label'])
     df_train = pd.DataFrame({'text': X_train, 'label': y_train}).sort_values(['label'])
@@ -73,4 +76,3 @@ def generate(file: pathlib.Path, prefix="misspelled"):
     (df_valid
         .pipe(add_spelling_errors, aug=aug)
         .pipe(dataframe_to_nlu_file, write_path=f"test/{prefix}-nlu-valid.yml", label_col="label"))
-
