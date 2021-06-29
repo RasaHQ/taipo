@@ -1,5 +1,7 @@
+import pytest
 import pandas as pd
-from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file
+
+from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file, entity_names
 
 
 def test_yaml_both_ways(tmp_path):
@@ -14,3 +16,16 @@ def test_yaml_both_ways(tmp_path):
     dataframe_to_nlu_file(df, write_path=path)
     df_read = nlu_path_to_dataframe(path)
     assert len(df_read) == 3
+
+
+@pytest.mark.parametrize(
+    "going_in, going_out",
+    [
+        ("[python](proglang)", ["proglang"]),
+        ("[python](proglang) and [r](proglang)", ["proglang"]),
+        ("[python](proglang) and [pandas](package)", ["proglang", "package"]),
+        ("there be no entities", []),
+    ],
+)
+def test_entity_names(going_in, going_out):
+    assert entity_names([going_in]) == going_out

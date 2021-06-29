@@ -8,6 +8,7 @@ base_packages = [
     "numpy>=1.18.5",
     "typer==0.3.2",
     "nlpaug>=1.1.4",
+    "parse>=1.19.0",
 ]
 
 dev_packages = [

@@ -27,6 +27,11 @@ aug = nac.KeyboardAug(
 )
 
 
+def add_single_spelling_error(rasa_str):
+    """Attach spelling error. Keeps entity brackets intact."""
+    pass
+
+
 def add_spelling_errors(dataf, aug, text_col="text"):
     """Applies the keyboard typos to a column in the dataframe."""
     return dataf.assign(**{text_col: lambda d: aug.augment(list(d[text_col]), n=1)})

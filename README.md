@@ -21,6 +21,8 @@ python -m pip install "taipo @ git+https://github.com/RasaHQ/taipo.git"
 
 ## Usage
 
+Taipo comes with a small suite of sub-commands.
+
 ```
 > python -m taipo
 
@@ -35,20 +37,39 @@ Commands:
   util      Some utility commands.
 ```
 
+### `taipo keyboard`
+
 ```
-rasa train nlu --nlu data/nlu-train.yml         # 0.9789016248897846
-rasa test nlu --nlu test/nlu-valid.yml          # 0.8969441247922261
-rasa test nlu --nlu test/nlu-valid-spelling.yml # 0.7396752333461194
+> python -m taipo keyboard
 
-rasa train nlu --nlu data/nlu-train-spelling.yml --finetune --epoch-fraction 0.1 --fixed-model-name spelling-epoch-1
-rasa test nlu --nlu test/nlu-valid-spelling.yml # 0.786088735455824
+  Commands to simulate keyboard typos.
 
-rasa train nlu --nlu data/nlu-train-spelling.yml --finetune models/nlu-20210628-131700.tar.gz  --epoch-fraction 0.2 --fixed-model-name spelling-epoch-2
-rasa test nlu --nlu test/nlu-valid-spelling.yml # 0.8163917657588544
+Options:
+  --help  Show this message and exit.
 
-rasa train nlu --nlu data/nlu-train-spelling.yml --finetune models/nlu-20210628-131700.tar.gz  --epoch-fraction 0.3 --fixed-model-name spelling-epoch-3
-rasa test nlu --nlu test/nlu-valid-spelling.yml # 0.8248305843242552
+Commands:
+  augment   Applies typos to an NLU file and saves it to disk.
+  generate  Generate train/validation data with/without misspelling.
 ```
+
+### `taipo util`
+
+We host some utility methods to transform intent-based data from .csv to .yml.
+Be aware, these methods ignore entities!
+
+```
+> python -m taipo util
+
+  Some utility commands.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  csv-to-yml  Turns a .csv file into nlu.yml for Rasa
+  yml-to-csv  Turns a nlu.yml file into .csv
+```
+
 
 ## Roadmap
 

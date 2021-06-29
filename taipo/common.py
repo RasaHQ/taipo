@@ -2,6 +2,7 @@ import yaml
 import json
 import pathlib
 import pandas as pd
+from parse import compile as parse_compile
 
 
 def nlu_path_to_dataframe(path):
@@ -74,3 +75,23 @@ def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"
         .replace("  -", "   -")
     )
     return pathlib.Path(write_path).write_text(dump)
+
+
+def entity_names(rasa_strings):
+    """
+    Finds all entities in a sequence of Rasa style NLU strings.
+
+    Usage:
+
+    ```python
+    out = entity_names("[python](proglang) and [pandas](package)")
+    assert out == ["proglang", "package"]
+    ```
+    """
+    r = parse_compile("({entity})")
+    results = [list(r.findall(s)) for s in rasa_strings]
+    flat_results = [item for sublist in results for item in sublist]
+    if len(flat_results) == 0:
+        return []
+    uniq = pd.DataFrame([_.named for _ in flat_results])["entity"].unique()
+    return list(uniq)
