@@ -1,0 +1,39 @@
+text,label
+hey,greet
+hello,greet
+hi,greet
+good morning,greet
+good evening,greet
+hey there,greet
+bye,goodbye
+goodbye,goodbye
+see you around,goodbye
+see you later,goodbye
+foo,out_of_scope
+bar,out_of_scope
+wut,out_of_scope
+buz,out_of_scope
+are you a bot?,bot_challenge
+are you a human?,bot_challenge
+am I talking to a bot?,bot_challenge
+am I talking to a human?,bot_challenge
+i want to talk about python - How do you do inline delegates in vb.net like python,talk_code
+Code to ask yes/no question in javascript,talk_code
+Executing JavaScript from Flex: Is this javascript function dangerous?,talk_code
+What does this python error mean?,talk_code
+javascript localsimplement shortcut key combination of CTRL or SHIFT + letter through javascript - How can I create a Netflix-style iframe overlay without a huge javascript library?,talk_code
+"How can I share a variable value between classic asp, .NET and javascript - Detect via javascript whether Silverlight is installed",talk_code
+jQuery override form submit not working when submit called by javascript on a element,talk_code
+Why Stackoverflow binds user actions dynamically with javascript - Relocate JSF-generated javascript - Adding click event to button to fire javascript through VB.NET,talk_code
+What is the javascript MIME type for the type attribute of a script tag?,talk_code
+Are there caveats to dynamicly creating a form with javascript - How do I share a javascript object between different pages in Adobe AIR?,talk_code
+Auto start print html page using javascript - How can I delete my browser cookies using javascript - WCF javascript proxy not found when endpoint address is not blank,talk_code
+reference path re javascript intellisense,talk_code
+How do I pre-cache images for quick viewing with javascript - How do I look over a javascript array without using indexes in YUI?,talk_code
+"MVC and jQuery validation, where to 'weave' the javascript and how to embed into master page?",talk_code
+list of email addresses that can be used to test a javascript validation script,talk_code
+How to resolve a .lnk in c#,talk_code
+Creating local users on remote windows server using c#,talk_code
+Forcibly rollback an installer in [c#] setup projects(proglang),talk_code
+bring a console window to front in c#,talk_code
+what's the quickest way to extract a 5 digit number from a string in c#,talk_code
