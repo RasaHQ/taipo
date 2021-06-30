@@ -39,6 +39,10 @@ Commands:
 
 ### `taipo keyboard`
 
+These tools are able to simulate keyboard typos. It supports keyboard
+layouts of 10 languages (`de`, `en`, `es`, `fr`, `he`, `it`, `nl`, `pl`, `th`, `uk`). For
+more details on the mapping see [here](https://github.com/makcedward/nlpaug/tree/master/nlpaug/res/char/keyboard).
+
 ```
 > python -m taipo keyboard
 

@@ -28,6 +28,7 @@ def augment(
     out: pathlib.Path = typer.Argument(..., help="Folder to write misspelled file to"),
     char_max: int = typer.Option(3, help="Max number of chars to change per line"),
     word_max: int = typer.Option(3, help="Max number of words to change per line"),
+    lang: str = typer.Option("en", help="Language for keyboard layout"),
 ):
     """
     Applies typos to an NLU file and saves it to disk.
@@ -42,6 +43,7 @@ def augment(
         include_special_char=False,
         include_numeric=False,
         include_upper_case=False,
+        lang=lang,
     )
     dataf = nlu_path_to_dataframe(file)
     (
@@ -59,6 +61,7 @@ def generate(
     prefix: str = typer.Option("misspelled", help="Prefix to add to all the files"),
     char_max: int = typer.Option(3, help="Max number of chars to change per line"),
     word_max: int = typer.Option(3, help="Max number of words to change per line"),
+    lang: str = typer.Option("en", help="Language for keyboard layout"),
 ):
     """
     Generate train/validation data with/without misspelling.
@@ -75,6 +78,7 @@ def generate(
         include_special_char=False,
         include_numeric=False,
         include_upper_case=False,
+        lang=lang,
     )
     dataf = nlu_path_to_dataframe(file)
 
