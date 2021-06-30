@@ -22,8 +22,28 @@ def test_keyboard_augment(tmp_path, path_in, path_out):
     ]
     runner.invoke(app, cmd)
     expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
-    print(f"{tmp_path}/{path_in}", f"{tmp_path}/{path_out}")
     assert nlu_path_to_dataframe(f"{tmp_path}/{path_out}").shape == expected
+
+
+@pytest.mark.parametrize(
+    "lang", ["de", "en", "es", "fr", "he", "it", "nl", "pl", "th", "uk"]
+)
+def test_keyboard_lang(tmp_path, lang):
+    """
+    Ensure that the languages listed in nlpaug indeed work.
+    https://github.com/makcedward/nlpaug/tree/master/nlpaug/res/char/keyboard
+    """
+    cmd = [
+        "keyboard",
+        "augment",
+        "tests/data/nlu/nlu.yml",
+        f"{tmp_path}/nlu.yml",
+        "--lang",
+        lang,
+    ]
+    runner.invoke(app, cmd)
+    expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
+    assert nlu_path_to_dataframe(f"{tmp_path}/nlu.yml").shape == expected
 
 
 def test_keyboard_generate():
