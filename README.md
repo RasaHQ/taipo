@@ -137,11 +137,6 @@ The following files will have been added.
 ┃   ┣━━ 📄 nlu-valid.yml                ( 333 items)
 ┃   ┗━━ 📄 misspelled-nlu-valid.yml     ( 333 items)
 ┗━━ 📄 nlu-orig.yml                     (1000 items)
-=======
-
-Commands:
-  augment   Applies typos to an NLU file and saves it to disk.
-  generate  Generate train/validation data with/without misspelling.
 ```
 
 ### `taipo util`
