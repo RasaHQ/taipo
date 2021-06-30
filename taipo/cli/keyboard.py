@@ -25,7 +25,7 @@ def add_spelling_errors(dataf, aug, text_col="text"):
 @app.command()
 def augment(
     file: pathlib.Path = typer.Argument(..., help="The original nlu.yml file"),
-    out: pathlib.Path = typer.Argument(..., help="Folder to write misspelled file to"),
+    out: pathlib.Path = typer.Argument(..., help="Path to write misspelled file to"),
     char_max: int = typer.Option(3, help="Max number of chars to change per line"),
     word_max: int = typer.Option(3, help="Max number of words to change per line"),
     lang: str = typer.Option("en", help="Language for keyboard layout"),
