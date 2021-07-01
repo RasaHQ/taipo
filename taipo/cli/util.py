@@ -12,11 +12,16 @@ app = typer.Typer(
     help="""Some utility commands.""",
 )
 
+
 @app.command()
-def csv_to_yml(file: pathlib.Path = typer.Argument(..., help="The csv file to convert"), 
-               out: pathlib.Path = typer.Option(pathlib.Path("."), help="The path of the output file."),
-               text_col: str = typer.Option("text", help="Name of the text column."),
-               label_col: str = typer.Option("label", help="Name of the label column.")):
+def csv_to_yml(
+    file: pathlib.Path = typer.Argument(..., help="The csv file to convert"),
+    out: pathlib.Path = typer.Option(
+        pathlib.Path("."), help="The path of the output file."
+    ),
+    text_col: str = typer.Option("text", help="Name of the text column."),
+    label_col: str = typer.Option("intent", help="Name of the label column."),
+):
     """
     Turns a .csv file into nlu.yml for Rasa
     """
@@ -27,8 +32,12 @@ def csv_to_yml(file: pathlib.Path = typer.Argument(..., help="The csv file to co
 
 
 @app.command()
-def yml_to_csv(file: pathlib.Path = typer.Argument(..., help="The csv file to convert"), 
-               out: pathlib.Path = typer.Option(pathlib.Path("."), help="The path of the output file.")):
+def yml_to_csv(
+    file: pathlib.Path = typer.Argument(..., help="The csv file to convert"),
+    out: pathlib.Path = typer.Option(
+        pathlib.Path("."), help="The path of the output file."
+    ),
+):
     """
     Turns a nlu.yml file into .csv
     """
