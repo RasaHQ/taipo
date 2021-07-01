@@ -193,4 +193,4 @@ Options:
 
 ## Roadmap
 
-- Implement a Greek character translator, [see forum inspiration](https://forum.rasa.com/t/phonetics-featurizer/42132/17).
+- Implement a Greek character translator, [see forum inspiration](https://forum.rasa.com/t/phonetics-featurizer/42132/17) and [available package](https://pypi.org/project/transliterate/). 
