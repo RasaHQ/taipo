@@ -157,7 +157,7 @@ Commands:
   yml-to-csv  Turns a nlu.yml file into .csv
 ```
 
-### `taipo util csv-to-yml`
+#### `taipo util csv-to-yml`
 
 ```
 > python -m taipo util csv-to-yml --help
@@ -175,7 +175,7 @@ Options:
   --help            Show this message and exit.
 ```
 
-### `taipo util yml-to-csv`
+#### `taipo util yml-to-csv`
 
 ```
 > python -m taipo util csv-to-yml --help

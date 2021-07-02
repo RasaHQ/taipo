@@ -73,7 +73,7 @@ def dataframe_to_nlu_file(dataf, write_path, text_col="text", label_col="intent"
             }
         )
     dump = (
-        yaml.dump(result, sort_keys=False, width=1000)
+        yaml.dump(result, sort_keys=False, width=1000, allow_unicode=True)
         .replace("examples:", "examples: |")
         .replace("  -", "   -")
     )
