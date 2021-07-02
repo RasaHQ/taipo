@@ -55,9 +55,11 @@ def augment(
     """
     Applies translitertion to an NLU file and saves it to disk.
     """
-    if target == source == "latin":
-        typer.echo("Error! Either --target or --source needs to be set.")
-        typer.Exit(1)
+    if target == source:
+        typer.echo(
+            "Error! Either --target or --source needs to be set. Cannot be the same."
+        )
+        raise typer.Exit(1)
     lang = target if target != "latin" else source
     reversed = target == "latin"
     dataf = nlu_path_to_dataframe(file)
@@ -83,6 +85,11 @@ def generate(
 
     Will also generate files for the `/test` directory.
     """
+    if target == source:
+        typer.echo(
+            "Error! Either --target or --source needs to be set. Cannot be the same."
+        )
+        raise typer.Exit(1)
     lang = target if target != "latin" else source
     reversed = target == "latin"
     dataf = nlu_path_to_dataframe(file)

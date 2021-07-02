@@ -1,4 +1,5 @@
 import pathlib
+import itertools as it
 
 import pytest
 from typer.testing import CliRunner
@@ -19,6 +20,8 @@ def test_translit_augment(tmp_path, path_in, path_out):
         "augment",
         "tests/data/nlu/nlu.yml",
         f"{tmp_path}/{path_in}",
+        "--target",
+        "el",
     ]
     runner.invoke(app, cmd)
     expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
@@ -37,7 +40,7 @@ def test_translit_lang(tmp_path, lang):
         "augment",
         "tests/data/nlu/nlu.yml",
         f"{tmp_path}/nlu.yml",
-        "--lang",
+        "--target",
         lang,
     ]
     runner.invoke(app, cmd)
@@ -70,3 +73,29 @@ def test_translit_generate():
         assert pathlib.Path(f).exists()
         pathlib.Path(f).unlink()
     assert res.exit_code == 0
+
+
+@pytest.mark.parametrize(
+    "source,target,cmd",
+    [
+        ("latin", "latin", "augment"),
+        ("el", "el", "augment"),
+        ("latin", "latin", "generate"),
+        ("el", "el", "generate"),
+    ],
+)
+def test_invalid_lang_settings(source, target, cmd):
+    """Gotta make sure we exit."""
+    cmd = [
+        "translit",
+        cmd,
+        "data/nlu-orig.yml",
+        "--prefix",
+        "translated",
+        "--source",
+        source,
+        "--target",
+        target,
+    ]
+    res = runner.invoke(app, cmd)
+    assert res.exit_code != 0
