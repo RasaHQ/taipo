@@ -301,4 +301,4 @@ Options:
 
 ## Roadmap
 
-- Implement a Greek character translator, [see forum inspiration](https://forum.rasa.com/t/phonetics-featurizer/42132/17) and [available package](https://pypi.org/project/transliterate/).
+- Implement phonetic typo generator. Not all spelling mistakes are caused by a keyboard after all. 
