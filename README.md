@@ -39,6 +39,8 @@ Commands:
 
 ### `taipo keyboard`
 
+![](images/keyboard.png)
+
 These tools are able to simulate keyboard typos. It uses [nlpaug](https://github.com/makcedward/nlpaug)
 as a backend and supports keyboard layouts of 10 languages
 (`de`, `en`, `es`, `fr`, `he`, `it`, `nl`, `pl`, `th`, `uk`). For
@@ -141,6 +143,8 @@ The current disk state is now:
 ```
 
 ### `taipo translit`
+
+![](images/translit.png)
 
 These tools are able to transliterate to and from a latin alphabet. It
 uses [transliterate](https://github.com/barseghyanartur/transliterate) as
