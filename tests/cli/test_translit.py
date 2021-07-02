@@ -1,4 +1,5 @@
 import pathlib
+import itertools as it
 
 import pytest
 from typer.testing import CliRunner
@@ -12,13 +13,15 @@ runner = CliRunner()
 @pytest.mark.parametrize(
     "path_in,path_out", [("nlu.yml", "nlu.yml"), ("foobar.yml", "foobar.yml")]
 )
-def test_keyboard_augment(tmp_path, path_in, path_out):
+def test_translit_augment(tmp_path, path_in, path_out):
     """Ensure basic usage of command works."""
     cmd = [
-        "keyboard",
+        "translit",
         "augment",
         "tests/data/nlu/nlu.yml",
         f"{tmp_path}/{path_in}",
+        "--target",
+        "el",
     ]
     runner.invoke(app, cmd)
     expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
@@ -26,19 +29,18 @@ def test_keyboard_augment(tmp_path, path_in, path_out):
 
 
 @pytest.mark.parametrize(
-    "lang", ["de", "en", "es", "fr", "he", "it", "nl", "pl", "th", "uk"]
+    "lang", ["ru", "mn", "sr", "bg", "ka", "uk", "el", "mk", "l1", "hy"]
 )
-def test_keyboard_lang(tmp_path, lang):
+def test_translit_lang(tmp_path, lang):
     """
     Ensure that the languages listed in nlpaug indeed work.
-    https://github.com/makcedward/nlpaug/tree/master/nlpaug/res/char/keyboard
     """
     cmd = [
-        "keyboard",
+        "translit",
         "augment",
         "tests/data/nlu/nlu.yml",
         f"{tmp_path}/nlu.yml",
-        "--lang",
+        "--target",
         lang,
     ]
     runner.invoke(app, cmd)
@@ -46,20 +48,54 @@ def test_keyboard_lang(tmp_path, lang):
     assert nlu_path_to_dataframe(f"{tmp_path}/nlu.yml").shape == expected
 
 
-def test_keyboard_generate():
+def test_translit_generate():
     """Ensure basic usage of command works."""
     files = [
         "data/nlu-train.yml",
-        "data/typod-nlu-train.yml",
+        "data/translated-nlu-train.yml",
         "test/nlu-valid.yml",
-        "test/typod-nlu-valid.yml",
+        "test/translated-nlu-valid.yml",
     ]
     for f in files:
         if pathlib.Path(f).exists():
             pathlib.Path(f).unlink()
-    cmd = ["keyboard", "generate", "data/nlu-orig.yml", "--prefix", "typod"]
+    cmd = [
+        "translit",
+        "generate",
+        "data/nlu-orig.yml",
+        "--prefix",
+        "translated",
+        "--target",
+        "el",
+    ]
     res = runner.invoke(app, cmd)
     for f in files:
         assert pathlib.Path(f).exists()
         pathlib.Path(f).unlink()
     assert res.exit_code == 0
+
+
+@pytest.mark.parametrize(
+    "source,target,cmd",
+    [
+        ("latin", "latin", "augment"),
+        ("el", "el", "augment"),
+        ("latin", "latin", "generate"),
+        ("el", "el", "generate"),
+    ],
+)
+def test_invalid_lang_settings(source, target, cmd):
+    """Gotta make sure we exit."""
+    cmd = [
+        "translit",
+        cmd,
+        "data/nlu-orig.yml",
+        "--prefix",
+        "translated",
+        "--source",
+        source,
+        "--target",
+        target,
+    ]
+    res = runner.invoke(app, cmd)
+    assert res.exit_code != 0

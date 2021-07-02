@@ -1,6 +1,7 @@
 import typer
 
 from taipo.cli.keyboard import app as keyboard_app
+from taipo.cli.translit import app as translit_app
 from taipo.cli.util import app as util_app
 
 
@@ -14,6 +15,7 @@ app = typer.Typer(
 )
 
 app.add_typer(keyboard_app, name="keyboard")
+app.add_typer(translit_app, name="translit")
 app.add_typer(util_app, name="util")
 
 if __name__ == "__main__":
