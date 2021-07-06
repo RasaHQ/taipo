@@ -29,7 +29,7 @@ dev_packages = [
 
 setup(
     name="taipo",
-    version="0.0.1",
+    version="0.0.2",
     packages=find_packages(exclude=["notebooks", "data"]),
     install_requires=base_packages,
     extras_require={
