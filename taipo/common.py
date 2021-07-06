@@ -18,10 +18,10 @@ def nlu_path_to_dataframe(path):
     res = (
         Clumper.read_yaml(path)
         .explode("nlu")
-        .keep(lambda d: d['nlu'] if ('intent' in d['nlu'].keys()) else False)
+        .keep(lambda d: d["nlu"] if ("intent" in d["nlu"].keys()) else False)
         .mutate(
             examples=lambda d: d["nlu"]["examples"].split("\n"),
-            intent=lambda d: d['nlu']['intent'],
+            intent=lambda d: d["nlu"]["intent"],
         )
         .drop("nlu", "version")
         .explode(text="examples")
