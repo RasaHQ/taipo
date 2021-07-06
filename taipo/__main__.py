@@ -1,8 +1,8 @@
 import typer
 
-from taipo.cli.keyboard import app as keyboard_app
-from taipo.cli.translit import app as translit_app
-from taipo.cli.util import app as util_app
+from .cli.keyboard import app as keyboard_app
+from .cli.translit import app as translit_app
+from .cli.util import app as util_app
 
 
 app = typer.Typer(
