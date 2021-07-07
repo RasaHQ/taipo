@@ -11,6 +11,7 @@ base_packages = [
     "parse>=1.19.0",
     "clumper>=0.2.13",
     "transliterate>=1.10.2",
+    "rich>=10.4.0",
 ]
 
 dev_packages = [
