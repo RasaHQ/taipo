@@ -4,10 +4,9 @@
 
 > taipo is a mispelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
 
-This project contains augmentation techniques to aid in the domain of mispellings
-in NLP. In particular it hosts a suite of tools to generate spelling errors for Rasa NLU files.
-The hope is that algorithms can be trained on these errors and that they become
-more robust as a result.
+This app contains tools for data quality in Rasa. It can generate 
+augmented data but it can also check for bad labels in your training data. 
+The hope is this tool contributes to data that leads to more robust models.
 
 Feedback on Non-English languages is *especially* appreciated!
 
@@ -26,14 +25,17 @@ Taipo comes with a small suite of sub-commands.
 ```
 > python -m taipo
 
-  This app generates augmented datasets for Rasa nlu files. The hope is that
-  such datasets can cause the models to train for robustness.
+  This app contains tools for data quality in Rasa. It can generate
+  augmented data but it can also check for bad labels. The hope is this tool
+  contributes to data that leads to more robust models.
 
 Options:
   --help  Show this message and exit.
 
 Commands:
+  confirm   Confirms labels via a trained model.
   keyboard  Commands to simulate keyboard typos.
+  translit  Commands to generate transliterations.
   util      Some utility commands.
 ```
 
