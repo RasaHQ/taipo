@@ -98,3 +98,18 @@ def entity_names(rasa_strings):
         return []
     uniq = pd.DataFrame([_.named for _ in flat_results])["entity"].unique()
     return list(uniq)
+
+
+def replace_ent_assignment(texts):
+    """
+    Takes in a list of strings, possibly with entity annotations, and
+    returns a list of strings without entity annotations.
+    """
+    parser = parse_compile("[{entity}]({ent_name})")
+    results = []
+    for t in texts:
+        for found in [_.named for _ in parser.findall(t)]:
+            t = t.replace(f"[{found['entity']}]", found["entity"])
+            t = t.replace(f"({found['ent_name']})", "")
+        results.append(t)
+    return results

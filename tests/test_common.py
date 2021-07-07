@@ -1,7 +1,12 @@
 import pytest
 import pandas as pd
 
-from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file, entity_names
+from taipo.common import (
+    nlu_path_to_dataframe,
+    dataframe_to_nlu_file,
+    entity_names,
+    replace_ent_assignment,
+)
 
 
 def test_yaml_both_ways(tmp_path):
@@ -34,3 +39,16 @@ def test_nlu_path_to_dataframe():
 )
 def test_entity_names(going_in, going_out):
     assert entity_names([going_in]) == going_out
+
+
+@pytest.mark.parametrize(
+    "going_in, going_out",
+    [
+        ("[python](proglang)", "python"),
+        ("[python](proglang) and [r](proglang)", "python and r"),
+        ("[python](proglang) and [pandas](package)", "python and pandas"),
+        ("there be no entities", "there be no entities"),
+    ],
+)
+def test_replace_ent_assignment(going_in, going_out):
+    assert replace_ent_assignment([going_in]) == [going_out]
