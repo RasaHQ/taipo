@@ -12,3 +12,10 @@ nlu:
     - Code to ask yes/no question in [javascript](proglang)
     - Executing [JavaScript](proglang) from Flex: Is this [javascript](proglang) function dangerous?
     - What does this [python](proglang) error mean?
+- regex: account_number
+  examples: |
+    - \d{10,12}
+- synonym: Python
+  examples: |
+    - python
+    - python3
