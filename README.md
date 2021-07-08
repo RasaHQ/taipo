@@ -167,7 +167,7 @@ Commands:
 
 #### `taipo translit augment`
 
-Transliterates a single NLU file.
+Transliterates a single NLU file to and from a latin alphabet.
 
 ```
 > python -m taipo translit augment --help
