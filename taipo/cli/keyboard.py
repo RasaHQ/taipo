@@ -24,6 +24,7 @@ def add_spelling_errors(dataf, aug, text_col="text"):
     """Applies the keyboard typos to a column in the dataframe."""
     texts = list(dataf["text"])
     names = entity_names(texts) + curly_entity_names(texts)
+    print(names)
     aug.stopwords = names
     return dataf.assign(**{text_col: lambda d: aug.augment(list(d[text_col]), n=1)})
 

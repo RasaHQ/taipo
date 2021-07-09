@@ -116,7 +116,7 @@ def gen_curly_ents(text):
         text = text[sq1 + sq2 + br1 + br2 :]
 
 
-def curly_entity_names(texts):
+def curly_entity_items(texts):
     """
     Returns a list of all the curly entity bits for a list of texts.
     """
@@ -124,7 +124,16 @@ def curly_entity_names(texts):
     for text in texts:
         items = gen_curly_ents(text)
         for ent, curly in items:
-            results.append(curly)
+            cleaned = (
+                curly.replace(":", " ")
+                .replace("{", "")
+                .replace("}", "")
+                .replace(",", " ")
+                .split(" ")
+            )
+            for item in cleaned:
+                if item != "":
+                    results.append(item)
     return list(set(results))
 
 

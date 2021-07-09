@@ -6,7 +6,7 @@ from taipo.common import (
     dataframe_to_nlu_file,
     entity_names,
     replace_ent_assignment,
-    curly_entity_names,
+    curly_entity_items,
 )
 
 
@@ -65,12 +65,15 @@ def test_replace_ent_assignment(going_in, going_out):
     "going_in, going_out",
     [
         ("there be no entities", []),
-        ("[python]{ent:proglang, value:python}", ["{ent:proglang, value:python}"]),
+        (
+            "[python]{ent:proglang, value:python}",
+            ["ent", "proglang", "value", "python"],
+        ),
         (
             "[js]{ent:proglang, value:javascript} n [python]{ent:proglang, value:python}",
-            ["{ent:proglang, value:javascript}", "{ent:proglang, value:python}"],
+            ["ent", "proglang", "value", "python", "javascript"],
         ),
     ],
 )
 def test_curly_entity_names(going_in, going_out):
-    assert curly_entity_names([going_in]) == going_out
+    assert set(curly_entity_items([going_in])) == set(going_out)
