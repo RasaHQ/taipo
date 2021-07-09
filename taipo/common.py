@@ -101,6 +101,42 @@ def entity_names(rasa_strings):
     return list(uniq)
 
 
+def gen_curly_ents(text):
+    """
+    Returns a list of all the curly entity bits for a single text.
+    """
+    while text.find("[") != -1:
+        sq1 = text.find("[")
+        sq2 = text[sq1:].find("]")
+        br1 = text[sq1 + sq2 :].find("{")
+        br2 = text[sq1 + sq2 + br1 :].find("}")
+        ent = text[sq1 : sq1 + sq2 + 1]
+        curly_bit = text[sq1 + sq2 + br1 : sq1 + sq2 + br1 + br2 + 1]
+        yield ent, curly_bit
+        text = text[sq1 + sq2 + br1 + br2 :]
+
+
+def curly_entity_items(texts):
+    """
+    Returns a list of all the curly entity bits for a list of texts.
+    """
+    results = []
+    for text in texts:
+        items = gen_curly_ents(text)
+        for ent, curly in items:
+            cleaned = (
+                curly.replace(":", " ")
+                .replace("{", "")
+                .replace("}", "")
+                .replace(",", " ")
+                .split(" ")
+            )
+            for item in cleaned:
+                if item != "":
+                    results.append(item)
+    return list(set(results))
+
+
 def replace_ent_assignment(texts):
     """
     Takes in a list of strings, possibly with entity annotations, and

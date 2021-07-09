@@ -5,7 +5,12 @@ import pandas as pd
 import nlpaug.augmenter.char as nac
 from sklearn.model_selection import train_test_split
 
-from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file, entity_names
+from taipo.common import (
+    nlu_path_to_dataframe,
+    dataframe_to_nlu_file,
+    entity_names,
+    curly_entity_items,
+)
 
 
 app = typer.Typer(
@@ -17,7 +22,8 @@ app = typer.Typer(
 
 def add_spelling_errors(dataf, aug, text_col="text"):
     """Applies the keyboard typos to a column in the dataframe."""
-    names = entity_names(list(dataf["text"]))
+    texts = list(dataf["text"])
+    names = entity_names(texts) + curly_entity_items(texts)
     aug.stopwords = names
     return dataf.assign(**{text_col: lambda d: aug.augment(list(d[text_col]), n=1)})
 
