@@ -73,7 +73,7 @@ def augment(
 @app.command()
 def generate(
     file: pathlib.Path = typer.Argument(..., help="The original nlu.yml file"),
-    seed: int = typer.Option(42, help="The seed value to split the data"),
+    seed_aug: int = typer.Option(42, help="The seed value to split the data"),
     test_size: int = typer.Option(33, help="Percentage of data to keep as test data"),
     prefix: str = typer.Option("translit", help="Prefix to add to all the files"),
     target: str = typer.Option("latin", help="Alphabet to map to."),
@@ -95,7 +95,7 @@ def generate(
     dataf = nlu_path_to_dataframe(file)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        dataf["text"], dataf["intent"], test_size=test_size / 100, random_state=seed
+        dataf["text"], dataf["intent"], test_size=test_size / 100, random_state=seed_aug
     )
 
     df_valid = pd.DataFrame({"text": X_test, "intent": y_test}).sort_values(["intent"])

@@ -4,8 +4,8 @@
 
 > taipo is a mispelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
 
-This app contains tools for data quality in Rasa. It can generate 
-augmented data but it can also check for bad labels in your training data. 
+This app contains tools for data quality in Rasa. It can generate
+augmented data but it can also check for bad labels in your training data.
 The hope is this tool contributes to data that leads to more robust models.
 
 Feedback on Non-English languages is *especially* appreciated!
@@ -79,6 +79,7 @@ Options:
   --char-max INTEGER  Max number of chars to change per line  [default: 3]
   --word-max INTEGER  Max number of words to change per line  [default: 3]
   --lang TEXT         Language for keyboard layout  [default: en]
+  --seed-aug INTEGER  The seed value to augment the data
   --help              Show this message and exit.
 ```
 
@@ -113,13 +114,14 @@ Arguments:
   FILE  The original nlu.yml file  [required]
 
 Options:
-  --seed INTEGER       The seed value to split the data  [default: 42]
-  --test-size INTEGER  Percentage of data to keep as test data  [default: 33]
-  --prefix TEXT        Prefix to add to all the files  [default: misspelled]
-  --char-max INTEGER   Max number of chars to change per line  [default: 3]
-  --word-max INTEGER   Max number of words to change per line  [default: 3]
-  --lang TEXT          Language for keyboard layout  [default: en]
-  --help               Show this message and exit.
+  --seed-split INTEGER  The seed value to split the data  [default: 42]
+  --seed-aug INTEGER    The seed value to augment the data
+  --test-size INTEGER   Percentage of data to keep as test data  [default: 33]
+  --prefix TEXT         Prefix to add to all the files  [default: misspelled]
+  --char-max INTEGER    Max number of chars to change per line  [default: 3]
+  --word-max INTEGER    Max number of words to change per line  [default: 3]
+  --lang TEXT           Language for keyboard layout  [default: en]
+  --help                Show this message and exit.
 ```
 
 ##### Example Usage
