@@ -75,5 +75,5 @@ def test_replace_ent_assignment(going_in, going_out):
         ),
     ],
 )
-def test_curly_entity_names(going_in, going_out):
+def test_curly_entity_items(going_in, going_out):
     assert set(curly_entity_items([going_in])) == set(going_out)
