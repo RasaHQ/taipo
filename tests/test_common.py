@@ -6,6 +6,7 @@ from taipo.common import (
     dataframe_to_nlu_file,
     entity_names,
     replace_ent_assignment,
+    curly_entity_names,
 )
 
 
@@ -54,43 +55,22 @@ def test_entity_names(going_in, going_out):
         ("[python](proglang) and [r](proglang)", "python and r"),
         ("[python](proglang) and [pandas](package)", "python and pandas"),
         ("there be no entities", "there be no entities"),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package)",
-            "python and r and pandas",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package)",
-            "python and r and pandas and numpy",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package) and [jupyter](package)",
-            "python and r and pandas and numpy and jupyter",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package) and [scipy](package)",
-            "python and r and pandas and numpy and scipy",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package) and [scipy](package) and [jupyter](package)",
-            "python and r and pandas and numpy and scipy and jupyter",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package) and [scipy](package) and [jupyter](package) and [matplotlib](package)",
-            "python and r and pandas and numpy and scipy and jupyter and matplotlib",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package) and [scipy](package) and [jupyter](package) and [matplotlib](package) and [jupyter_contrib](package)",
-            "python and r and pandas and numpy and scipy and jupyter and matplotlib and jupyter_contrib",
-        ),
-        (
-            "[python](proglang) and [r](proglang) and [pandas](package) and [numpy](package) and [scipy](package) and [jupyter](package) and [matplotlib](package) and [jupyter_contrib](package) and [ipython](package)",
-            "python and r and pandas and numpy and scipy and jupyter and matplotlib and jupyter_contrib and ipython",
-        ),
     ],
 )
 def test_replace_ent_assignment(going_in, going_out):
-    """
-    Parts of this test were written with Github 's copilot tool.
-    Anybody care to guess which examples were written by the maintainer?
-    """
     assert replace_ent_assignment([going_in]) == [going_out]
+
+
+@pytest.mark.parametrize(
+    "going_in, going_out",
+    [
+        ("there be no entities", []),
+        ("[python]{ent:proglang, value:python}", ["{ent:proglang, value:python}"]),
+        (
+            "[js]{ent:proglang, value:javascript} n [python]{ent:proglang, value:python}",
+            ["{ent:proglang, value:javascript}", "{ent:proglang, value:python}"],
+        ),
+    ],
+)
+def test_curly_entity_names(going_in, going_out):
+    assert curly_entity_names([going_in]) == going_out
