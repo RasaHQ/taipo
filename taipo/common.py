@@ -110,9 +110,9 @@ def gen_curly_ents(text):
         sq2 = text[sq1:].find("]")
         br1 = text[sq1 + sq2 :].find("{")
         br2 = text[sq1 + sq2 + br1 :].find("}")
-        yield text[sq1 : sq1 + sq2 + 1], text[
-            sq1 + sq2 + br1 : sq1 + sq2 + br1 + br2 + 1
-        ]
+        ent = text[sq1 : sq1 + sq2 + 1]
+        curly_bit = text[sq1 + sq2 + br1 : sq1 + sq2 + br1 + br2 + 1]
+        yield ent, curly_bit
         text = text[sq1 + sq2 + br1 + br2 :]
 
 
