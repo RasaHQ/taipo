@@ -1,3 +1,4 @@
+import random
 import pathlib
 
 import typer
@@ -35,10 +36,13 @@ def augment(
     char_max: int = typer.Option(3, help="Max number of chars to change per line"),
     word_max: int = typer.Option(3, help="Max number of words to change per line"),
     lang: str = typer.Option("en", help="Language for keyboard layout"),
+    seed_aug: int = typer.Option(None, help="The seed value to augment the data"),
 ):
     """
     Applies typos to an NLU file and saves it to disk.
     """
+    random.seed(seed_aug)
+
     aug = nac.KeyboardAug(
         aug_char_min=1,
         aug_char_max=char_max,
@@ -62,7 +66,8 @@ def augment(
 @app.command()
 def generate(
     file: pathlib.Path = typer.Argument(..., help="The original nlu.yml file"),
-    seed: int = typer.Option(42, help="The seed value to split the data"),
+    seed_split: int = typer.Option(42, help="The seed value to split the data"),
+    seed_aug: int = typer.Option(None, help="The seed value to augment the data"),
     test_size: int = typer.Option(33, help="Percentage of data to keep as test data"),
     prefix: str = typer.Option("misspelled", help="Prefix to add to all the files"),
     char_max: int = typer.Option(3, help="Max number of chars to change per line"),
@@ -74,6 +79,8 @@ def generate(
 
     Will also generate files for the `/test` directory.
     """
+    random.seed(seed_aug)
+
     aug = nac.KeyboardAug(
         aug_char_min=1,
         aug_char_max=char_max,
@@ -89,7 +96,10 @@ def generate(
     dataf = nlu_path_to_dataframe(file)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        dataf["text"], dataf["intent"], test_size=test_size / 100, random_state=seed
+        dataf["text"],
+        dataf["intent"],
+        test_size=test_size / 100,
+        random_state=seed_split,
     )
 
     df_valid = pd.DataFrame({"text": X_test, "intent": y_test}).sort_values(["intent"])
