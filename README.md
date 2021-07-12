@@ -281,7 +281,7 @@ the `nlu.yml` file. Any wrongly classifier examples will be saved in the
 `checkthese.csv` file.
 
 ```
-> python -m taipo translit nlu.yml model.tar.gz checkthese.csv
+> python -m taipo confirm nlu.yml model.tar.gz checkthese.csv
 ```
 
 The `checkthese.csv` file also contains a confidence level, indicating
