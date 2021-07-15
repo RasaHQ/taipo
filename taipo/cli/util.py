@@ -1,7 +1,11 @@
 import pathlib
+from rich import console
 
 import typer
 import pandas as pd
+from clumper import Clumper
+from rich.table import Table
+from rich.console import Console
 
 from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file
 
@@ -44,3 +48,42 @@ def yml_to_csv(
     if out.is_dir():
         out = out.absolute() / f"{file.stem}.csv"
     nlu_path_to_dataframe(file).to_csv(out, index=False)
+
+
+@app.command()
+def summary(
+    folder: pathlib.Path = typer.Argument(
+        ..., help="Folder that contains grid-result folders."
+    ),
+):
+    """
+    Displays summary tables for gridsearch results.
+    """
+    stringify = lambda d: str(round(d, 5))
+
+    data = (
+        Clumper.read_json(f"{folder}/*/intent_report.json", add_path=True)
+        .select("read_path", "accuracy", "weighted avg")
+        .mutate(
+            folder=lambda d: pathlib.Path(d["read_path"]).parts[-2],
+            precision=lambda d: stringify(d["weighted avg"]["precision"]),
+            recall=lambda d: stringify(d["weighted avg"]["recall"]),
+            f1=lambda d: stringify(d["weighted avg"]["f1-score"]),
+        )
+        .drop("read_path", "weighted avg")
+        .sort(lambda d: -d["accuracy"])
+        .mutate(accuracy=lambda d: stringify(d["accuracy"]))
+        .collect()
+    )
+
+    table = Table()
+    table.add_column("folder", style="cyan")
+    table.add_column("accuracy")
+    table.add_column("precision")
+    table.add_column("recall")
+    table.add_column("f1")
+    for d in data:
+        table.add_row(d["folder"], d["accuracy"], d["precision"], d["recall"], d["f1"])
+
+    console = Console()
+    console.print(table)
