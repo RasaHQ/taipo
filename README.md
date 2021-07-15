@@ -43,6 +43,8 @@ Commands:
   util      Some utility commands.
 ```
 
+Check the [quick-start guide](https://rasahq.github.io/taipo/getting-started/) for a tutorial on how to use this tool with Rasa.
+
 ## Features
 
 ### `taipo keyboard`
