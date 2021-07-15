@@ -1,3 +1,8 @@
+<img src="icon.png" width="125" height="125" align="right" /> <img src="logo.svg" width=125 height=125 align="right">
+
+<br>
+<br>
+
 # taipo
 
 This app contains tools for data quality in Rasa. It can generate

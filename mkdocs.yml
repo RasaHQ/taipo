@@ -19,12 +19,13 @@ copyright: Copyright &copy; 2020 <a href="https://twitter.com/Rasa_HQ">Rasa</a>,
 theme:
   name: material
   favicon: images/fig.png
-  logo: arrow.png
   feature:
     tabs: true
   palette:
     primary: white
     accent: purple
+  font:
+    text: Ubuntu
 markdown_extensions:
   - toc:
       permalink: true
