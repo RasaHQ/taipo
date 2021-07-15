@@ -167,7 +167,6 @@ You may get a table that looks like this:
 └───────────────────────┴──────────┴───────────┴─────────┴─────────┘
 ```
 
-
 ## Feedback
 
 This project is part of ongoing research. In general NLP algorithms have proven to be brittle
