@@ -39,8 +39,8 @@
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,700%7C&display=fallback">
+        <style>body,input{font-family:"Ubuntu",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
     
     
@@ -79,7 +79,8 @@
   <nav class="md-header-nav md-grid" aria-label="Header">
     <a href="https://rasahq.github.io/taipo/" title="taipo" class="md-header-nav__button md-logo" aria-label="taipo">
       
-  <img src="../arrow.png" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
     </a>
     <label class="md-header-nav__button md-icon" for="__drawer">
@@ -165,7 +166,8 @@
   <label class="md-nav__title" for="__drawer">
     <a href="https://rasahq.github.io/taipo/" title="taipo" class="md-nav__button md-logo" aria-label="taipo">
       
-  <img src="../arrow.png" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
     </a>
     taipo
@@ -241,6 +243,34 @@
         <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-spelling-errors" class="md-nav__link">
+    Generating Spelling Errors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finetuning" class="md-nav__link">
+    Finetuning
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmarking" class="md-nav__link">
+    Benchmarking
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" class="md-nav__link">
+    Feedback
   </a>
   
 </li>
@@ -362,6 +392,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#generating-spelling-errors" class="md-nav__link">
+    Generating Spelling Errors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finetuning" class="md-nav__link">
+    Finetuning
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmarking" class="md-nav__link">
+    Benchmarking
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feedback" class="md-nav__link">
+    Feedback
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -390,6 +448,97 @@ to train models that are robust against spelling errors.</p>
 <p>You can install this experiment via pip.</p>
 <pre><code>python -m pip install &quot;taipo @ git+https://github.com/RasaHQ/taipo.git&quot;
 </code></pre>
+<p>This will install the <code>taipo</code> command line interface in your virtualenv.
+You can confirm the installation went fine by running:</p>
+<pre><code>python -m taipo
+</code></pre>
+<h2 id="generating-spelling-errors">Generating Spelling Errors<a class="headerlink" href="#generating-spelling-errors" title="Permanent link">&para;</a></h2>
+<p>Let's say that you've gotten a Rasa project. Your folder
+structure would look something like:</p>
+<pre><code>📂 rasa-project-dir
+┣━━ 📂 actions
+┣━━ 📂 data
+┃   ┣━━ 📄 nlu.yml
+┃   ┣━━ 📄 rules.yml
+┃   ┗━━ 📄 stories.yml
+┣━━ 📂 models
+┣━━ 📂 tests
+┣━━ 📄 config.yml
+┣━━ 📄 credentials.yml
+┣━━ 📄 domain.yml
+┗━━ 📄 endpoints.yml
+</code></pre>
+<p>The idea is that we will generate a variant of <code>nlu.yml</code> that contains spelling errors.
+This way, we might be able to train our models to be robust against it.</p>
+<p>A straightforward way to do this is via;</p>
+<pre><code>python -m taipo keyboard augment data/nlu.yml data/typo-nlu.yml
+</code></pre>
+<p>This will generate a new file that contains typos.</p>
+<pre><code>📂 rasa-project-dir
+┣━━ 📂 actions
+┣━━ 📂 data
+┃   ┣━━ 📄 nlu.yml
+┃   ┣━━ 📄 typo-nlu.yml
+┃   ┣━━ 📄 rules.yml
+┃   ┗━━ 📄 stories.yml
+┣━━ 📂 models
+┣━━ 📂 tests
+┣━━ 📄 config.yml
+┣━━ 📄 credentials.yml
+┣━━ 📄 domain.yml
+┗━━ 📄 endpoints.yml
+</code></pre>
+<p>When you inspect the <code>typo-nlu.yml</code> file you'll notice that we copied each
+example from the original <code>nlu.yml</code> file but added some typos. These typos
+are based on the keyboard layout. The base setting assumes the US layout but
+you can configure some non-English layouts as well. Check the <a href="../api/keyboard/">API docs</a> for
+more info.</p>
+<p>When you now train your nlu model, it will also train on these misspelled items.</p>
+<pre><code>python -m rasa train
+</code></pre>
+<p>You will notice that training takes a fair bit longer because we're training
+on twice as much data now.</p>
+<h2 id="finetuning">Finetuning<a class="headerlink" href="#finetuning" title="Permanent link">&para;</a></h2>
+<p>If you're worried about the long training time, you may prefer to use the fine-tuning
+feature instead. If you're unfamiliar with the technique, you may appreciate this
+algorithm whiteboard video.</p>
+<iframe width="100%" height="480" src="https://www.youtube-nocookie.com/embed/FipRjQRaCz8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>To train the system with finetuning you can first train your NLU model on
+the original data.</p>
+<pre><code>rasa train nlu --nlu nlu/nlu.yml --fixed-model-name orig
+</code></pre>
+<p>Once this model is trained, you can finetune it on the misspelled data.</p>
+<pre><code>rasa train nlu --nlu nlu/nlu.yml \
+               --finetune models/orig.tar.gz \
+               --epoch-fraction 0.1 \
+               --fixed-model-name finetuned
+</code></pre>
+<h2 id="benchmarking">Benchmarking<a class="headerlink" href="#benchmarking" title="Permanent link">&para;</a></h2>
+<p>Training against misspelled data is nice, but we'd also like to quantify the effect
+that typos have on our system. This guide assumes that you have a <code>tests/nlu-valid.yml</code>
+file which can be used as a validation dataset. Let's make a misspelled variant of this
+dataset first.</p>
+<pre><code>python -m taipo keyboard augment tests/nlu-valid.yml tests/typo-nlu-valid.yml
+</code></pre>
+<p>We can now run our two models <code>models/orig.tar.gz</code> and <code>models/finetuned.tar.gz</code> against
+both of these datasets.</p>
+<pre><code>rasa test nlu -u tests/nlu-valid.yml --model models/orig.tar.gz --out gridresults/orig-model
+rasa test nlu -u tests/nlu-valid.yml --model models/finetuned.tar.gz --out gridresults/finetuned-model
+rasa test nlu -u tests/typo-nlu-valid.yml --model models/orig.tar.gz --out gridresults/typo-orig-model
+rasa test nlu -u tests/typo-nlu-valid.yml --model models/finetuned.tar.gz --out gridresults/typo-finetuned-model
+</code></pre>
+<p>This results in 4 folders that contain your benchmarked results. You could use
+<a href="https://github.com/RasaHQ/rasalit#overview">rasalit</a> to visualise these but you
+can also inspect the results manually.</p>
+<h2 id="feedback">Feedback<a class="headerlink" href="#feedback" title="Permanent link">&para;</a></h2>
+<p>This project is part of ongoing research. In general NLP algorithms have proven to be brittle
+against typos and we wanted to make it easy for our community to investigate this. Feedback
+on the tool, as well as any interesting typo-related findings, is much appreciated.</p>
+<p>Feel free to mention any bugs on <a href="https://github.com/RasaHQ/taipo/issues/new">Github</a> and any
+other feedback on <a href="https://forum.rasa.com/">the rasa forum</a>. You can poke
+<code>@koaning</code> on the Rasa forum if you have any typo-related insights. Especially insights from
+non-English languages would be much appreciated!</p>
                 
               
               
