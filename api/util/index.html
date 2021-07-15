@@ -329,6 +329,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#taipo-util-summary" class="md-nav__link">
+    taipo util summary
+  </a>
+  
+    <nav class="md-nav" aria-label="taipo util summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    Example Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -380,6 +400,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#taipo-util-summary" class="md-nav__link">
+    taipo util summary
+  </a>
+  
+    <nav class="md-nav" aria-label="taipo util summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    Example Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -411,6 +451,7 @@ Options:
 Commands:
   csv-to-yml  Turns a .csv file into nlu.yml for Rasa
   yml-to-csv  Turns a nlu.yml file into .csv
+  summary     Displays summary tables for gridsearch results.
 </code></pre>
 <p>We host some utility methods to transform intent-based data from .csv to .yml. Be aware, these methods ignore entities!</p>
 <h2 id="taipo-util-csv-to-yml"><code>taipo util csv-to-yml</code><a class="headerlink" href="#taipo-util-csv-to-yml" title="Permanent link">&para;</a></h2>
@@ -440,6 +481,46 @@ Arguments:
 Options:
   --out PATH  The path of the output file.  [default: .]
   --help      Show this message and exit.
+</code></pre>
+<h2 id="taipo-util-summary"><code>taipo util summary</code><a class="headerlink" href="#taipo-util-summary" title="Permanent link">&para;</a></h2>
+<pre><code>Usage: __main__.py util summary [OPTIONS] FOLDER
+
+  Displays summary tables for gridsearch results.
+
+Arguments:
+  FOLDER  Folder that contains grid-result folders.  [required]
+
+Options:
+  --help      Show this message and exit.
+</code></pre>
+<h3 id="example-usage">Example Usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h3>
+<p>Let's say that you've got a folder structure like so: </p>
+<pre><code>📂 gridresults
+┣━━ 📂 orig-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┣━━ 📂 finetuned-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┣━━ 📂 typo-orig-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┗━━ 📂 typo-finetuned-model
+    ┣━━ ...
+    ┗━━ 📄 intent_report.json
+</code></pre>
+<p>Then you can get a convenient summary via:</p>
+<pre><code>python -m taipo util summary gridresults
+</code></pre>
+<p>You may get a table that looks like this:</p>
+<pre><code>┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+┃ folder                ┃ accuracy ┃ precision ┃ recall  ┃ f1      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
+│ finetuned-model       │ 0.9022   │ 0.90701   │ 0.9022  │ 0.90265 │
+│ orig-model            │ 0.90018  │ 0.90972   │ 0.90018 │ 0.90192 │
+│ typo-finetuned-model  │ 0.89965  │ 0.90302   │ 0.89965 │ 0.89984 │
+│ typo-orig-model       │ 0.79419  │ 0.82945   │ 0.79419 │ 0.80266 │
+└───────────────────────┴──────────┴───────────┴─────────┴─────────┘
 </code></pre>
                 
               

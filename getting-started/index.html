@@ -530,7 +530,35 @@ rasa test nlu -u tests/typo-nlu-valid.yml --model models/finetuned.tar.gz --out 
 </code></pre>
 <p>This results in 4 folders that contain your benchmarked results. You could use
 <a href="https://github.com/RasaHQ/rasalit#overview">rasalit</a> to visualise these but you
-can also inspect the results manually.</p>
+can also use a utility function from the command line. Let's say that you've got 
+a folder structure like so: </p>
+<pre><code>📂 gridresults
+┣━━ 📂 orig-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┣━━ 📂 finetuned-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┣━━ 📂 typo-orig-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┗━━ 📂 typo-finetuned-model
+    ┣━━ ...
+    ┗━━ 📄 intent_report.json
+</code></pre>
+<p>Then you can get a convenient summary via:</p>
+<pre><code>python -m taipo util summary gridresults
+</code></pre>
+<p>You may get a table that looks like this:</p>
+<pre><code>┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+┃ folder                ┃ accuracy ┃ precision ┃ recall  ┃ f1      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
+│ finetuned-model       │ 0.9022   │ 0.90701   │ 0.9022  │ 0.90265 │
+│ orig-model            │ 0.90018  │ 0.90972   │ 0.90018 │ 0.90192 │
+│ typo-finetuned-model  │ 0.89965  │ 0.90302   │ 0.89965 │ 0.89984 │
+│ typo-orig-model       │ 0.79419  │ 0.82945   │ 0.79419 │ 0.80266 │
+└───────────────────────┴──────────┴───────────┴─────────┴─────────┘
+</code></pre>
 <h2 id="feedback">Feedback<a class="headerlink" href="#feedback" title="Permanent link">&para;</a></h2>
 <p>This project is part of ongoing research. In general NLP algorithms have proven to be brittle
 against typos and we wanted to make it easy for our community to investigate this. Feedback
