@@ -1,0 +1,32 @@
+site_name: taipo
+extra_css: [style.css]
+repo_url: https://github.com/RasaHQ/taipo
+site_url: https://rasahq.github.io/taipo/
+site_description: Experiments for data quality in Rasa.
+site_author: Vincent D. Warmerdam @ Rasa Research
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - API:
+    - keyboard: api/keyboard.md
+    - translit: api/translit.md
+    - confirm: api/confirm.md
+    - util: api/util.md
+plugins:
+  - search
+copyright: Copyright &copy; 2020 <a href="https://twitter.com/Rasa_HQ">Rasa</a>, Maintained by <a href="https://twitter.com/fishnets88">Vincent</a>.
+theme:
+  name: material
+  favicon: images/fig.png
+  logo: arrow.png
+  feature:
+    tabs: true
+  palette:
+    primary: white
+    accent: purple
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
