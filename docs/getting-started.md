@@ -129,7 +129,43 @@ rasa test nlu -u tests/typo-nlu-valid.yml --model models/finetuned.tar.gz --out 
 
 This results in 4 folders that contain your benchmarked results. You could use
 [rasalit](https://github.com/RasaHQ/rasalit#overview) to visualise these but you
-can also inspect the results manually.
+can also use a utility function from the command line. Let's say that you've got
+a folder structure like so:
+
+```
+📂 gridresults
+┣━━ 📂 orig-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┣━━ 📂 finetuned-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┣━━ 📂 typo-orig-model
+┃   ┣━━ ...
+┃   ┗━━ 📄 intent_report.json
+┗━━ 📂 typo-finetuned-model
+    ┣━━ ...
+    ┗━━ 📄 intent_report.json
+```
+
+Then you can get a convenient summary via:
+
+```
+python -m taipo util summary gridresults
+```
+
+You may get a table that looks like this:
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+┃ folder                ┃ accuracy ┃ precision ┃ recall  ┃ f1      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
+│ finetuned-model       │ 0.9022   │ 0.90701   │ 0.9022  │ 0.90265 │
+│ orig-model            │ 0.90018  │ 0.90972   │ 0.90018 │ 0.90192 │
+│ typo-finetuned-model  │ 0.89965  │ 0.90302   │ 0.89965 │ 0.89984 │
+│ typo-orig-model       │ 0.79419  │ 0.82945   │ 0.79419 │ 0.80266 │
+└───────────────────────┴──────────┴───────────┴─────────┴─────────┘
+```
 
 ## Feedback
 
