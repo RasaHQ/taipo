@@ -49,16 +49,16 @@ Commands:
 
 ![](docs/images/keyboard.png)
 
-Check the [API docs](https://rasahq.github.io/taipo/api/confirm/) for more info.
+Check the [API docs](https://rasahq.github.io/taipo/api/keyboard/) for more info.
 
 ### `taipo translit`
 
 ![](docs/images/translit.png)
 
-Check the [API docs](https://rasahq.github.io/taipo/api/translit.md) for more info.
+Check the [API docs](https://rasahq.github.io/taipo/api/translit/) for more info.
 
 ### `taipo confirm`
 
 ![](docs/images/confirm.png)
 
-Check the [API docs](https://rasahq.github.io/taipo/api/confirm.md) for more info.
+Check the [API docs](https://rasahq.github.io/taipo/api/confirm/) for more info.

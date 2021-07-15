@@ -43,19 +43,19 @@ Check the quick-start guide for a tutorial on how to use this tool.
 
 ![](images/keyboard.png)
 
-Check the [API docs](api/keyboard.md) for more info.
+Check the [API docs](api/keyboard/) for more info.
 
 ### Transliteration
 
 ![](images/translit.png)
 
-Check the [API docs](api/translit.md) for more info.
+Check the [API docs](api/translit/) for more info.
 
 ### Confirmation
 
 ![](images/confirm.png)
 
-Check the [API docs](api/confirm.md) for more info.
+Check the [API docs](api/confirm/) for more info.
 
 ## What's in the name?
 
