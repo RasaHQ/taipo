@@ -1,8 +1,9 @@
-<img src="docs/icon.png" width="125" height="125" align="right" /> <img src="docs/logo.svg" width=125 height=125 align="right">
+<img src="icon.png" width="125" height="125" align="right" /> <img src="logo.svg" width=125 height=125 align="right">
+
+<br>
+<br>
 
 # taipo
-
-> taipo is a mispelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
 
 This app contains tools for data quality in Rasa. It can generate
 augmented data but it can also check for bad labels in your training data.
@@ -10,17 +11,13 @@ The hope is this tool contributes to data that leads to more robust models.
 
 Feedback on Non-English languages is *especially* appreciated!
 
-## Install
+## Installation
 
 You can install this experiment via pip.
 
 ```
 python -m pip install "taipo @ git+https://github.com/RasaHQ/taipo.git"
 ```
-
-## Documentation
-
-You can learn all about the project in detail on the [project documentation](https://rasahq.github.io/taipo/).
 
 ## Usage
 
@@ -43,24 +40,28 @@ Commands:
   util      Some utility commands.
 ```
 
-Check the [quick-start guide](https://rasahq.github.io/taipo/getting-started/) for a tutorial on how to use this tool with Rasa.
+Check the quick-start guide for a tutorial on how to use this tool.
 
-## Features
+## Main Features
 
-### `taipo keyboard`
+### Keyboard Typos
 
-![](docs/images/keyboard.png)
+![](images/keyboard.png)
 
-Check the [API docs](https://rasahq.github.io/taipo/api/keyboard/) for more info.
+Check the [API docs](api/keyboard/) for more info.
 
-### `taipo translit`
+### Transliteration
 
-![](docs/images/translit.png)
+![](images/translit.png)
 
-Check the [API docs](https://rasahq.github.io/taipo/api/translit/) for more info.
+Check the [API docs](api/translit/) for more info.
 
-### `taipo confirm`
+### Confirmation
 
-![](docs/images/confirm.png)
+![](images/confirm.png)
 
-Check the [API docs](https://rasahq.github.io/taipo/api/confirm/) for more info.
+Check the [API docs](api/confirm/) for more info.
+
+## What's in the name?
+
+> taipo is a mispelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
