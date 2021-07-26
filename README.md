@@ -6,7 +6,7 @@
 
 This app contains tools for data quality in Rasa. It can generate
 augmented data but it can also check for bad labels in your training data.
-The hope is this tool contributes to data that leads to more robust models.
+The hope is that this tool contributes to data quality that leads to more robust models.
 
 Feedback on Non-English languages is *especially* appreciated!
 
