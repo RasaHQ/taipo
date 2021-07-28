@@ -2,7 +2,7 @@
 
 # taipo
 
-> taipo is a mispelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
+> taipo is a misspelling of typo, it means [evil spirit](https://en.wiktionary.org/wiki/taipo)
 
 This app contains tools for data quality in Rasa. It can generate
 augmented data but it can also check for bad labels in your training data.
