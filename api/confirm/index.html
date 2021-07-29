@@ -304,9 +304,42 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#taipo-keyboard-logistic" class="md-nav__link">
+    taipo keyboard logistic
+  </a>
+  
+    <nav class="md-nav" aria-label="taipo keyboard logistic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#example-usage" class="md-nav__link">
     Example Usage
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#taipo-keyboard-rasa-model" class="md-nav__link">
+    taipo keyboard rasa-model
+  </a>
+  
+    <nav class="md-nav" aria-label="taipo keyboard rasa-model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage_1" class="md-nav__link">
+    Example Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -360,9 +393,42 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#taipo-keyboard-logistic" class="md-nav__link">
+    taipo keyboard logistic
+  </a>
+  
+    <nav class="md-nav" aria-label="taipo keyboard logistic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#example-usage" class="md-nav__link">
     Example Usage
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#taipo-keyboard-rasa-model" class="md-nav__link">
+    taipo keyboard rasa-model
+  </a>
+  
+    <nav class="md-nav" aria-label="taipo keyboard rasa-model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage_1" class="md-nav__link">
+    Example Usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -389,22 +455,63 @@
                 <h1 id="taipo-confirm"><code>taipo confirm</code><a class="headerlink" href="#taipo-confirm" title="Permanent link">&para;</a></h1>
 <pre><code>&gt; python -m taipo confirm --help
 
-  Confirms labels via a trained model.
+  Confirm labels inside of nlu.yml files.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  logistic    Confirm via basic sklearn pipeline.
+  rasa-model  Confirm via trained Rasa pipeline.
+</code></pre>
+<p><img alt="" src="../../images/confirm.png" /></p>
+<h2 id="taipo-keyboard-logistic"><code>taipo keyboard logistic</code><a class="headerlink" href="#taipo-keyboard-logistic" title="Permanent link">&para;</a></h2>
+<p>This command trains a basic countvector model
+and runs it against one of your <code>nlu.yml</code> files.</p>
+<pre><code>&gt; taipo keyboard logistic --help
+Usage: confirm logistic [OPTIONS] MODEL_PATH NLU_PATH [OUT_PATH]
+
+  Confirm via basic sklearn pipeline.
 
 Arguments:
-  NLU_PATH    The nlu.yml file to check.  [required]
-  MODEL_PATH  The Rasa model to use.  [required]
-  OUT_PATH    CSV output path.  [required]
+  NLU_PATH    The original nlu.yml file  [required]
+  [OUT_PATH]  Path to write examples file to  [default: checkthese.csv]
 
 Options:
   --help  Show this message and exit.
 </code></pre>
-<p><img alt="" src="../../images/confirm.png" /></p>
-<p>The confirm command takes a pretrained Rasa model and runs it against one of
-your nlu.yml files. The idea is that any intents that the model got wrong are
+<p>The idea is that any intents that the model got wrong are
 interesting candidates to double-check. There may be some confusing/incorrectly
 labelled examples in your data.</p>
 <h3 id="example-usage">Example Usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h3>
+<p>This command will take the <code>nlu.yml</code> file, train a pipeline based on it
+which it will then use to try to find bad labels. Any wrongly classifier
+examples will be saved in the <code>checkthese.csv</code> file.</p>
+<pre><code>&gt; python -m taipo confirm logistic nlu.yml checkthese.csv
+</code></pre>
+<p>The <code>checkthese.csv</code> file also contains a confidence level, indicating
+the confidence that the model had while making the prediction. When a model
+shows high confidence on a wrong label, it deserves priority.</p>
+<h2 id="taipo-keyboard-rasa-model"><code>taipo keyboard rasa-model</code><a class="headerlink" href="#taipo-keyboard-rasa-model" title="Permanent link">&para;</a></h2>
+<p>This command takes a pretrained Rasa model and runs it against one of
+your nlu.yml files.</p>
+<pre><code>&gt; taipo keyboard rasa-model --help
+Usage: confirm rasa-model [OPTIONS] MODEL_PATH NLU_PATH [OUT_PATH]
+
+  Confirm via trained Rasa pipeline.
+
+Arguments:
+  MODEL_PATH  Location of Rasa model.  [required]
+  NLU_PATH    The original nlu.yml file  [required]
+  [OUT_PATH]  Path to write examples file to  [default: checkthese.csv]
+
+Options:
+  --help  Show this message and exit.
+</code></pre>
+<p>The idea is that any intents that the model got wrong are
+interesting candidates to double-check. There may be some confusing/incorrectly
+labelled examples in your data.</p>
+<h3 id="example-usage_1">Example Usage<a class="headerlink" href="#example-usage_1" title="Permanent link">&para;</a></h3>
 <p>This command will take the <code>model.tar.gz</code> model file and run it against
 the <code>nlu.yml</code> file. Any wrongly classifier examples will be saved in the
 <code>checkthese.csv</code> file.</p>
