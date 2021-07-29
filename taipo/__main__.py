@@ -5,7 +5,7 @@ import typer
 from taipo.cli.keyboard import app as keyboard_app
 from taipo.cli.translit import app as translit_app
 from taipo.cli.util import app as util_app
-from taipo.cli.confirm import confirm as confirm_func
+from taipo.cli.confirm import app as confirm_app
 
 
 app = typer.Typer(
@@ -20,17 +20,8 @@ app = typer.Typer(
 
 app.add_typer(keyboard_app, name="keyboard")
 app.add_typer(translit_app, name="translit")
+app.add_typer(confirm_app, name="confirm")
 app.add_typer(util_app, name="util")
-
-
-@app.command()
-def confirm(
-    nlu_path: pathlib.Path = typer.Argument(..., help="The nlu.yml file to check."),
-    model_path: pathlib.Path = typer.Argument(..., help="The Rasa model to use."),
-    out_path: pathlib.Path = typer.Argument(..., help="CSV output path."),
-):
-    """Confirms labels via a trained model."""
-    confirm_func(nlu_path=nlu_path, model_path=model_path, out_path=out_path)
 
 
 if __name__ == "__main__":
