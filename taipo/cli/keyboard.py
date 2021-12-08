@@ -18,10 +18,11 @@ from taipo.common import (
 # NOTE: the following custom implementation of a reverse tokenizer is necessary, since otherwise
 # nlpaug will add spaces between the entity annotations (e.g. 'going to [New York] (city )'), which will
 # lead to Rasa not picking them up as training examples.
-DETOKENIZER_REGEXS = [
+CUSTOM_DETOKENIZER_REGEXS = [
     (re.compile(r'\s([\[\(\{\<])\s'), r' \g<1>'),  # Left bracket
     (re.compile(r'\s([\]\)\}\>])\s'), r'\g<1> '),  # right bracket
-    (re.compile(r'\s\)$'), r')'),  # right bracket at the end of sentence
+    (re.compile(r'^\[\s'), r'['),  # left square bracket at beginning of sentence
+    (re.compile(r'\s\)$'), r')'),  # right round bracket at the end of sentence
     (re.compile(r'\] \('), r']('),  # entity annotation of the form "]("
     (re.compile(r'\s([.,:;?!%]+)([ \'"`])'), r'\1\2'),  # End of sentence
     (re.compile(r'\s([.,:;?!%]+)$'), r'\1'),  # End of sentence
@@ -30,7 +31,7 @@ DETOKENIZER_REGEXS = [
 
 def custom_reverse_tokenizer(tokens):
     text = ' '.join(tokens)
-    for regex, sub in DETOKENIZER_REGEXS:
+    for regex, sub in CUSTOM_DETOKENIZER_REGEXS:
         text = regex.sub(sub, text)
     return text.strip()
 
