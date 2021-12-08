@@ -113,7 +113,10 @@ def gen_curly_ents(text):
         ent = text[sq1 : sq1 + sq2 + 1]
         curly_bit = text[sq1 + sq2 + br1 : sq1 + sq2 + br1 + br2 + 1]
         yield ent, curly_bit
-        text = text[sq1 + sq2 + br1 + br2 :]
+        if curly_bit != "":
+            text = text[sq1 + sq2 + br1 + br2 :]
+        else:
+            text = text[sq1 + sq2 :]
 
 
 def curly_entity_items(texts):
