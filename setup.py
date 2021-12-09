@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 base_packages = [
-    "rasa>=2.6.0",
+    "rasa>=2.6,<3.0",
     "pandas>=1.0.5",
     "PyYAML>=5.4.1",
     "numpy>=1.18.5",
@@ -30,7 +30,7 @@ dev_packages = [
 
 setup(
     name="taipo",
-    version="0.0.5",
+    version="0.0.6",
     packages=find_packages(exclude=["notebooks", "data"]),
     install_requires=base_packages,
     extras_require={
