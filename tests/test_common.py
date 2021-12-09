@@ -73,7 +73,9 @@ def test_replace_ent_assignment(going_in, going_out):
             "[js]{ent:proglang, value:javascript} n [python]{ent:proglang, value:python}",
             ["ent", "proglang", "value", "python", "javascript"],
         ),
+        ("[r](proglang)", []),
     ],
 )
+@pytest.mark.timeout(5)
 def test_curly_entity_items(going_in, going_out):
     assert set(curly_entity_items([going_in])) == set(going_out)

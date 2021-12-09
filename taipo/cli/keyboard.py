@@ -19,18 +19,18 @@ from taipo.common import (
 # nlpaug will add spaces between the entity annotations (e.g. 'going to [New York] (city )'), which will
 # lead to Rasa not picking them up as training examples.
 CUSTOM_DETOKENIZER_REGEXS = [
-    (re.compile(r'\s([\[\(\{\<])\s'), r' \g<1>'),  # Left bracket
-    (re.compile(r'\s([\]\)\}\>])\s'), r'\g<1> '),  # right bracket
-    (re.compile(r'^\[\s'), r'['),  # left square bracket at beginning of sentence
-    (re.compile(r'\s\)$'), r')'),  # right round bracket at the end of sentence
-    (re.compile(r'\] \('), r']('),  # entity annotation of the form "]("
-    (re.compile(r'\s([.,:;?!%]+)([ \'"`])'), r'\1\2'),  # End of sentence
-    (re.compile(r'\s([.,:;?!%]+)$'), r'\1'),  # End of sentence
+    (re.compile(r"\s([\[\(\{\<])\s"), r" \g<1>"),  # Left bracket
+    (re.compile(r"\s([\]\)\}\>])\s"), r"\g<1> "),  # right bracket
+    (re.compile(r"^\[\s"), r"["),  # left square bracket at beginning of sentence
+    (re.compile(r"\s\)$"), r")"),  # right round bracket at the end of sentence
+    (re.compile(r"\] \("), r"]("),  # entity annotation of the form "]("
+    (re.compile(r'\s([.,:;?!%]+)([ \'"`])'), r"\1\2"),  # End of sentence
+    (re.compile(r"\s([.,:;?!%]+)$"), r"\1"),  # End of sentence
 ]
 
 
 def custom_reverse_tokenizer(tokens):
-    text = ' '.join(tokens)
+    text = " ".join(tokens)
     for regex, sub in CUSTOM_DETOKENIZER_REGEXS:
         text = regex.sub(sub, text)
     return text.strip()
@@ -48,7 +48,6 @@ def add_spelling_errors(dataf, aug, text_col="text"):
     texts = list(dataf["text"])
     names = entity_names(texts) + curly_entity_items(texts)
     aug.stopwords = names
-    aug.reverse_tokenizer = custom_reverse_tokenizer
     return dataf.assign(**{text_col: lambda d: aug.augment(list(d[text_col]), n=1)})
 
 
@@ -77,6 +76,7 @@ def augment(
         include_numeric=False,
         include_upper_case=False,
         lang=lang,
+        reverse_tokenizer=custom_reverse_tokenizer,
     )
     dataf = nlu_path_to_dataframe(file)
     (
