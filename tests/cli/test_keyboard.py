@@ -1,4 +1,5 @@
 import pathlib
+import re
 
 import pytest
 from typer.testing import CliRunner
@@ -23,6 +24,24 @@ def test_keyboard_augment(tmp_path, path_in, path_out):
     runner.invoke(app, cmd)
     expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
     assert nlu_path_to_dataframe(f"{tmp_path}/{path_out}").shape == expected
+
+
+def test_keyboard_augment_keeps_annotations(tmp_path):
+    """Ensure the format of entity annotations is kept correctly."""
+    cmd = [
+        "keyboard",
+        "augment",
+        "tests/data/nlu/nlu.yml",
+        f"{tmp_path}/nlu.yml",
+    ]
+    runner.invoke(app, cmd)
+    df_in = nlu_path_to_dataframe("tests/data/nlu/nlu.yml")
+    df_out = nlu_path_to_dataframe(f"{tmp_path}/nlu.yml")
+    annotation_pattern = r"\[\w+\]\(\w+\)"
+    for text_in, text_out in zip(df_in.text, df_out.text):
+        annotations_in = re.findall(annotation_pattern, text_in)
+        annotations_out = re.findall(annotation_pattern, text_out)
+        assert len(annotations_in) == len(annotations_out)
 
 
 @pytest.mark.parametrize(
