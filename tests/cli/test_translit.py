@@ -1,8 +1,11 @@
 import pathlib
 import itertools as it
 
+import pandas as pd
 import pytest
+from rasa.shared.nlu.constants import ENTITY_ATTRIBUTE_START, ENTITY_ATTRIBUTE_END
 from typer.testing import CliRunner
+from transliterate.utils import get_available_language_codes
 
 from taipo.__main__ import app
 from taipo.common import nlu_path_to_dataframe
@@ -29,12 +32,11 @@ def test_translit_augment(tmp_path, path_in, path_out):
 
 
 @pytest.mark.parametrize(
-    "lang", ["ru", "mn", "sr", "bg", "ka", "uk", "el", "mk", "l1", "hy"]
+    "lang",
+    ["ru", "mn", "sr", "bg", "ka", "uk", "el", "mk", "l1", "hy"],
 )
-def test_translit_lang(tmp_path, lang):
-    """
-    Ensure that the languages listed in nlpaug indeed work.
-    """
+def test_translit_lang(tmp_path: str, lang: str):
+    """Ensure that the languages listed in nlpaug indeed work."""
     cmd = [
         "translit",
         "augment",

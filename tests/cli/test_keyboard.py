@@ -1,5 +1,7 @@
+import os
 import pathlib
 import re
+import shutil
 
 import pytest
 from typer.testing import CliRunner
@@ -21,7 +23,9 @@ def test_keyboard_augment(tmp_path, path_in, path_out):
         "tests/data/nlu/nlu.yml",
         f"{tmp_path}/{path_in}",
     ]
-    runner.invoke(app, cmd)
+    result = runner.invoke(app, cmd)
+    print(result.stdout)
+    assert result.exit_code == 0
     expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
     assert nlu_path_to_dataframe(f"{tmp_path}/{path_out}").shape == expected
 
@@ -37,7 +41,7 @@ def test_keyboard_augment_keeps_annotations(tmp_path):
     runner.invoke(app, cmd)
     df_in = nlu_path_to_dataframe("tests/data/nlu/nlu.yml")
     df_out = nlu_path_to_dataframe(f"{tmp_path}/nlu.yml")
-    annotation_pattern = r"\[\w+\]\(\w+\)"
+    annotation_pattern = r"(\[\w+\]\(\w+\))|(\[\w+\]\{\w+\})"
     for text_in, text_out in zip(df_in.text, df_out.text):
         annotations_in = re.findall(annotation_pattern, text_in)
         annotations_out = re.findall(annotation_pattern, text_out)
@@ -47,7 +51,7 @@ def test_keyboard_augment_keeps_annotations(tmp_path):
 @pytest.mark.parametrize(
     "lang", ["de", "en", "es", "fr", "he", "it", "nl", "pl", "th", "uk"]
 )
-def test_keyboard_lang(tmp_path, lang):
+def test_keyboard_lang(tmp_path: str, lang: str):
     """
     Ensure that the languages listed in nlpaug indeed work.
     https://github.com/makcedward/nlpaug/tree/master/nlpaug/res/char/keyboard
@@ -65,7 +69,7 @@ def test_keyboard_lang(tmp_path, lang):
     assert nlu_path_to_dataframe(f"{tmp_path}/nlu.yml").shape == expected
 
 
-def test_keyboard_generate():
+def test_keyboard_generate(tmp_path: str):
     """Ensure basic usage of command works."""
     files = [
         "data/nlu-train.yml",
@@ -73,10 +77,13 @@ def test_keyboard_generate():
         "test/nlu-valid.yml",
         "test/typod-nlu-valid.yml",
     ]
-    for f in files:
-        if pathlib.Path(f).exists():
-            pathlib.Path(f).unlink()
-    cmd = ["keyboard", "generate", "data/nlu-orig.yml", "--prefix", "typod"]
+    files = [os.path.join(tmp_path, f) for f in files]
+
+    test_data_file = "./tests/data/nlu/nlu.yml"
+    orig_nlu_file = os.path.join(tmp_path, test_data_file)
+    shutil.copy(test_data_file, orig_nlu_file)
+
+    cmd = ["keyboard", "generate", orig_nlu_file, "--prefix", "typod"]
     res = runner.invoke(app, cmd)
     for f in files:
         assert pathlib.Path(f).exists()

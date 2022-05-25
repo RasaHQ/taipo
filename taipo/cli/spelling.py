@@ -1,11 +1,10 @@
 import pathlib
 
 import typer
-import pandas as pd
-import nlpaug.augmenter.char as nac
-from sklearn.model_selection import train_test_split
+from nlpaug.augmenter.char import KeyboardAug
 
-from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file
+from taipo import common
+from taipo.cli import keyboard
 
 
 app = typer.Typer(
@@ -13,23 +12,6 @@ app = typer.Typer(
     add_completion=False,
     help="""These commands augment a single file.""",
 )
-
-aug = nac.KeyboardAug(
-    aug_char_min=1,
-    aug_char_max=10,
-    aug_char_p=0.3,
-    aug_word_p=0.3,
-    aug_word_min=1,
-    aug_word_max=10,
-    include_special_char=False,
-    include_numeric=False,
-    include_upper_case=False,
-)
-
-
-def add_spelling_errors(dataf, aug, text_col="text"):
-    """Applies the keyboard typos to a column in the dataframe."""
-    return dataf.assign(**{text_col: lambda d: aug.augment(list(d[text_col]), n=1)})
 
 
 @app.command()
@@ -43,14 +25,10 @@ def augment(
     """
     Applies typos to an NLU file and saves it to disk.
     """
-    dataf = nlu_path_to_dataframe(file)
+    nlp_df = common.nlu_path_to_dataframe(file)
     out_path = out / f"{prefix}-{file.parts[-1]}"
-
-    (
-        dataf.pipe(add_spelling_errors, aug=aug).pipe(
-            dataframe_to_nlu_file, write_path=out_path, label_col="label"
-        )
-    )
+    common.apply_keyboard_augmenter(nlp_df=nlp_df, aug=aug)
+    common.dataframe_to_nlu_file(nlp_df=nlp_df, write_path=out_path)
 
 
 @app.command()
@@ -59,45 +37,38 @@ def generate(
     seed: int = typer.Option(42, help="The seed value to split the data."),
     test_size: int = typer.Option(33, help="Percentage of data to keep as test data."),
     prefix: str = typer.Option("misspelled"),
+    seed_aug: int = typer.Option(None, help="The seed value to augment the data"),
+    out_dir: pathlib.Path = typer.Argument(
+        pathlib.Path("./"),
+        help="Directory where the data and " "test subdirectories will be " "created.",
+    ),
 ):
-    """
-    Generate train/validation data with/without misspelling.
+    """Generate train/validation data with/without misspelling.
 
     Will also generate files for the `/test` directory.
     """
-    dataf = nlu_path_to_dataframe(file)
+    dataf = common.nlu_path_to_dataframe(file)
+    df_train, df_valid = common.split_uniformly(dataf, percentage=test_size, seed=seed)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        dataf["text"], dataf["label"], test_size=test_size / 100, random_state=seed
+    aug = KeyboardAug(
+        aug_char_max=10, aug_word_max=10, **keyboard.KEYBOARD_AUG_DEFAULTS
     )
 
-    df_valid = pd.DataFrame({"text": X_test, "label": y_test}).sort_values(["label"])
-    df_train = pd.DataFrame({"text": X_train, "label": y_train}).sort_values(["label"])
-
-    (
-        df_train.pipe(
-            dataframe_to_nlu_file, write_path="data/nlu-train.yml", label_col="label"
+    for df, folder, suffix in [
+        (df_train, "data", "train"),
+        (df_valid, "test", "valid"),
+    ]:
+        common.dataframe_to_nlu_file(
+            df,
+            write_path=out_dir / folder / f"nlu-{suffix}.yml",
         )
-    )
 
-    (
-        df_valid.pipe(
-            dataframe_to_nlu_file, write_path="test/nlu-valid.yml", label_col="label"
+        keyboard.apply_keyboard_augmenter(
+            df, aug=aug, skip_entities=False, seed=seed_aug
         )
-    )
+        seed_aug += 1  # don't create same misspellings in test :)
 
-    (
-        df_train.pipe(add_spelling_errors, aug=aug).pipe(
-            dataframe_to_nlu_file,
-            write_path=f"data/{prefix}-nlu-train.yml",
-            label_col="label",
+        common.dataframe_to_nlu_file(
+            df,
+            write_path=out_dir / folder / f"{prefix}-nlu-{suffix}.yml",
         )
-    )
-
-    (
-        df_valid.pipe(add_spelling_errors, aug=aug).pipe(
-            dataframe_to_nlu_file,
-            write_path=f"test/{prefix}-nlu-valid.yml",
-            label_col="label",
-        )
-    )
