@@ -1,5 +1,6 @@
 import copy
 import re
+from pathlib import Path
 from typing import List, Dict, Any, Tuple
 
 import pandas as pd
@@ -13,7 +14,7 @@ from rasa.shared.nlu.constants import (
 from taipo import common
 
 
-def test_yaml_both_ways(tmp_path: str):
+def test_yaml_both_ways(tmp_path: Path):
     """
     Generate a dataframe, save it as yml and read it back again.
     """

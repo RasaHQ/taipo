@@ -33,7 +33,7 @@ def split_uniformly(
     train_indices, test_indices = train_test_split(
         indices, test_size=percentage / 100, random_state=seed
     )
-    return df.iloc[train_indices], df.iloc[test_indices]
+    return df.iloc[train_indices].copy(), df.iloc[test_indices].copy()
 
 
 def nlu_path_to_dataframe(path: str) -> pd.DataFrame:

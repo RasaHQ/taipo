@@ -38,9 +38,9 @@ def generate(
     test_size: int = typer.Option(33, help="Percentage of data to keep as test data."),
     prefix: str = typer.Option("misspelled"),
     seed_aug: int = typer.Option(None, help="The seed value to augment the data"),
-    out_dir: pathlib.Path = typer.Argument(
-        pathlib.Path("./"),
-        help="Directory where the data and " "test subdirectories will be " "created.",
+    out_path: pathlib.Path = typer.Option(
+        "./",
+        help="Directory where the data and test subdirectories will be created.",
     ),
 ):
     """Generate train/validation data with/without misspelling.
@@ -54,21 +54,25 @@ def generate(
         aug_char_max=10, aug_word_max=10, **keyboard.KEYBOARD_AUG_DEFAULTS
     )
 
-    for df, folder, suffix in [
+    for df, sub_folder, suffix in [
         (df_train, "data", "train"),
         (df_valid, "test", "valid"),
     ]:
+        split_path = out_path / sub_folder
+        split_path.mkdir(parents=True)
+
         common.dataframe_to_nlu_file(
             df,
-            write_path=out_dir / folder / f"nlu-{suffix}.yml",
+            write_path=split_path / f"nlu-{suffix}.yml",
         )
 
         keyboard.apply_keyboard_augmenter(
             df, aug=aug, skip_entities=False, seed=seed_aug
         )
-        seed_aug += 1  # don't create same misspellings in test :)
+        if seed_aug is not None:
+            seed_aug += 1  # don't create same misspellings in test :)
 
         common.dataframe_to_nlu_file(
             df,
-            write_path=out_dir / folder / f"{prefix}-nlu-{suffix}.yml",
+            write_path=split_path / f"{prefix}-nlu-{suffix}.yml",
         )

@@ -1,10 +1,10 @@
-intent,text
-bot_challenge,are you a bot?
-bot_challenge,are you a human?
-bot_challenge,am I talking to a bot?
-bot_challenge,am I talking to a human?
-talk_code,i want to talk about [python](proglang) - How do you do inline delegates in vb.net like [python](proglang)
-talk_code,Code to ask yes/no question in [javascript](proglang)
-talk_code,Executing [JavaScript](proglang) from Flex: Is this [javascript](proglang) function dangerous?
-talk_code,What does this [python](proglang) error mean?
-talk_code,What does this [python]{"entity": "language", "role" : "some-role"} error mean?
+intent|text
+bot_challenge|are you a bot?
+bot_challenge|are you a human?
+bot_challenge|am I talking to a bot?
+bot_challenge|am I talking to a human?
+talk_code|i want to talk about [python](proglang) - How do you do inline delegates in vb.net like [python](proglang)
+talk_code|Code to ask yes/no question in [javascript](proglang)
+talk_code|Executing [JavaScript](proglang) from Flex: Is this [javascript](proglang) function dangerous?
+talk_code|What does this [python](proglang) error mean?
+talk_code|What does this [python]{"entity": "language", "role" : "some-role"} error

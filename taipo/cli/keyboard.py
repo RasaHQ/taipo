@@ -1,5 +1,5 @@
 import pathlib
-from random import random
+import random
 from typing import Optional
 
 import pandas as pd
@@ -84,9 +84,7 @@ def augment(
         lang=lang,
         **KEYBOARD_AUG_DEFAULTS,
     )
-    common.apply_keyboard_augmenter(
-        nlu_df=dataf, aug=aug, skip_entities=True, seed=seed_aug
-    )
+    apply_keyboard_augmenter(nlu_df=dataf, aug=aug, skip_entities=True, seed=seed_aug)
     common.dataframe_to_nlu_file(nlu_df=dataf, write_path=out)
 
 
@@ -100,9 +98,9 @@ def generate(
     char_max: int = typer.Option(3, help="Max number of chars to change per line"),
     word_max: int = typer.Option(3, help="Max number of words to change per line"),
     lang: str = typer.Option("en", help="Language for keyboard layout"),
-    out_dir: pathlib.Path = typer.Argument(
-        pathlib.Path("./"),
-        help="Directory where the data and " "test subdirectories will be " "created.",
+    out_path: pathlib.Path = typer.Option(
+        "./",
+        help="Directory where the data and test subdirectories will be created.",
     ),
 ):
     """Generate train/validation data with/without misspelling.
@@ -121,19 +119,25 @@ def generate(
         percentage=test_size,
         seed=seed_split,
     )
+    # out_path = pathlib.Path(out_dir)
 
-    for df, folder, suffix in [
+    for df, sub_folder, suffix in [
         (df_train, "data", "train"),
         (df_valid, "test", "valid"),
     ]:
-        common.dataframe_to_nlu_file(
-            df_train,
-            write_path=out_dir / folder / f"nlu-{suffix}.yml",
-        )
-        apply_keyboard_augmenter(df_train, aug=aug, skip_entities=True, seed=seed_aug)
-        seed_aug += 1  # don't create same misspellings in test :)
+
+        split_path = out_path / sub_folder
+        split_path.mkdir(parents=True)
 
         common.dataframe_to_nlu_file(
             df_train,
-            write_path=out_dir / folder / f"{prefix}-nlu-{suffix}.yml",
+            write_path=split_path / f"nlu-{suffix}.yml",
+        )
+        apply_keyboard_augmenter(df_train, aug=aug, skip_entities=True, seed=seed_aug)
+        if seed_aug is not None:
+            seed_aug += 1  # don't create same misspellings in test :)
+
+        common.dataframe_to_nlu_file(
+            df_train,
+            write_path=split_path / f"{prefix}-nlu-{suffix}.yml",
         )

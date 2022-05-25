@@ -1,14 +1,17 @@
 import pathlib
-from rich import console
 
-import typer
 import pandas as pd
+import rasa.shared.utils.io as rasa_io_utils
+import typer
 from clumper import Clumper
-from rich.table import Table
+from rasa.shared.nlu.constants import TEXT, ENTITIES, INTENT
+from rasa.shared.nlu.training_data.formats import rasa_yaml
+from rasa.shared.nlu.training_data.message import Message
+from rasa.shared.nlu.training_data.training_data import TrainingData
 from rich.console import Console
+from rich.table import Table
 
-from taipo.common import nlu_path_to_dataframe, dataframe_to_nlu_file
-
+from taipo import common
 
 app = typer.Typer(
     name="util",
@@ -26,13 +29,18 @@ def csv_to_yml(
     text_col: str = typer.Option("text", help="Name of the text column."),
     label_col: str = typer.Option("intent", help="Name of the label column."),
 ):
-    """
-    Turns a .csv file into nlu.yml for Rasa
-    """
-    dataf = pd.read_csv(file)
+    """Turns a .csv file into nlu.yml for Rasa"""
+    dataf = pd.read_csv(file, sep="|")
     if out.is_dir():
         out = out / "nlu.yml"
-    dataframe_to_nlu_file(dataf, write_path=out, label_col=label_col, text_col=text_col)
+    # Note: Entity annotations are already included in the text (and Rasa won't care).
+    td = TrainingData(
+        training_examples=[
+            Message(data={TEXT: str(text), INTENT: intent})
+            for text, intent in zip(dataf[text_col], dataf[label_col])
+        ]
+    )
+    rasa_io_utils.write_text_file(td.nlu_as_yaml(), out)
 
 
 @app.command()
@@ -42,12 +50,20 @@ def yml_to_csv(
         pathlib.Path("."), help="The path of the output file."
     ),
 ):
-    """
-    Turns a nlu.yml file into .csv
-    """
+    """Turns a nlu.yml file into .csv."""
     if out.is_dir():
         out = out.absolute() / f"{file.stem}.csv"
-    nlu_path_to_dataframe(file).to_csv(out, index=False)
+
+    nlu_df = common.nlu_path_to_dataframe(file)
+    writer = rasa_yaml.RasaYAMLWriter()
+    nlu_df[TEXT] = nlu_df.apply(
+        lambda row: writer.generate_message(
+            Message(data={TEXT: row[TEXT], ENTITIES: row[ENTITIES]})
+        ),
+        axis=1,
+    )
+    nlu_df = nlu_df.drop(columns=[ENTITIES])
+    nlu_df.to_csv(out, sep="|", index=False)
 
 
 @app.command()
@@ -56,9 +72,7 @@ def summary(
         ..., help="Folder that contains grid-result folders."
     ),
 ):
-    """
-    Displays summary tables for gridsearch results.
-    """
+    """Displays summary tables for gridsearch results."""
     stringify = lambda d: str(round(d, 5))
 
     data = (

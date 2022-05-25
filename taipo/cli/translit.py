@@ -82,7 +82,7 @@ def augment(
         raise typer.Exit(1)
 
     dataf = common.nlu_path_to_dataframe(file)
-    common.transliterate_text(dataf, source=source, target=target, skip_entities=True)
+    apply_transliteration(dataf, source=source, target=target, skip_entities=True)
     common.dataframe_to_nlu_file(dataf, write_path=out)
 
 
@@ -94,6 +94,10 @@ def generate(
     prefix: str = typer.Option("translit", help="Prefix to add to all the files"),
     target: str = typer.Option("l1", help="Alphabet to map to."),
     source: str = typer.Option("l1", help="Alphabet to map from."),
+    out_path: pathlib.Path = typer.Option(
+        "./",
+        help="Directory where the data and test subdirectories will be created.",
+    ),
 ):
     """
     Generate train/validation data with/without translitertion.
@@ -109,15 +113,17 @@ def generate(
     dataf = common.nlu_path_to_dataframe(file)
     df_train, df_valid = common.split_uniformly(dataf, percentage=test_size, seed=seed)
 
-    for df, folder, suffix in [
+    for df, sub_folder, suffix in [
         (df_train, "data", "train"),
         (df_valid, "test", "valid"),
     ]:
+        split_path = out_path / sub_folder
+        split_path.mkdir(parents=True)
 
-        common.dataframe_to_nlu_file(df, write_path=f"{folder}/nlu-{suffix}.yml")
-        common.transliterate_text(
+        common.dataframe_to_nlu_file(df, write_path=split_path / f"nlu-{suffix}.yml")
+        apply_transliteration(
             nlu_df=df, source=source, target=target, skip_entities=True
         )
         common.dataframe_to_nlu_file(
-            df, write_path=f"{folder}/{prefix}-nlu" f"-{suffix}.yml"
+            df, write_path=split_path / f"{prefix}-nlu" f"-{suffix}.yml"
         )

@@ -51,7 +51,7 @@ def test_keyboard_augment_keeps_annotations(tmp_path):
 @pytest.mark.parametrize(
     "lang", ["de", "en", "es", "fr", "he", "it", "nl", "pl", "th", "uk"]
 )
-def test_keyboard_lang(tmp_path: str, lang: str):
+def test_keyboard_lang(tmp_path: pathlib.Path, lang: str):
     """
     Ensure that the languages listed in nlpaug indeed work.
     https://github.com/makcedward/nlpaug/tree/master/nlpaug/res/char/keyboard
@@ -69,23 +69,30 @@ def test_keyboard_lang(tmp_path: str, lang: str):
     assert nlu_path_to_dataframe(f"{tmp_path}/nlu.yml").shape == expected
 
 
-def test_keyboard_generate(tmp_path: str):
+def test_keyboard_generate(tmp_path: pathlib.Path):
     """Ensure basic usage of command works."""
-    files = [
-        "data/nlu-train.yml",
-        "data/typod-nlu-train.yml",
-        "test/nlu-valid.yml",
-        "test/typod-nlu-valid.yml",
+    expected_output_files = [
+        os.path.join(tmp_path, f)
+        for f in [
+            "data/nlu-train.yml",
+            "data/typod-nlu-train.yml",
+            "test/nlu-valid.yml",
+            "test/typod-nlu-valid.yml",
+        ]
     ]
-    files = [os.path.join(tmp_path, f) for f in files]
 
-    test_data_file = "./tests/data/nlu/nlu.yml"
-    orig_nlu_file = os.path.join(tmp_path, test_data_file)
-    shutil.copy(test_data_file, orig_nlu_file)
+    orig_nlu_file = "./tests/data/nlu/nlu.yml"
 
-    cmd = ["keyboard", "generate", orig_nlu_file, "--prefix", "typod"]
+    cmd = [
+        "keyboard",
+        "generate",
+        orig_nlu_file,
+        "--prefix",
+        "typod",
+        "--out-path",
+        tmp_path,
+    ]
     res = runner.invoke(app, cmd)
-    for f in files:
-        assert pathlib.Path(f).exists()
-        pathlib.Path(f).unlink()
     assert res.exit_code == 0
+    for f in expected_output_files:
+        assert pathlib.Path(f).exists()
