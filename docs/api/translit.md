@@ -15,7 +15,7 @@ Commands:
 
 ![](../images/translit.png)
 
-These tools are able to transliterate to and from a latin alphabet. It
+These tools are able to transliterate to and from a latin alphabet ("`l1`"). It
 uses [transliterate](https://github.com/barseghyanartur/transliterate) as
 a backend and supports (`ru`, `mn`, `sr`, `bg`, `ka`, `uk`, `el`, `mk`, `l1`, `hy`).
 
@@ -33,9 +33,8 @@ Arguments:
   OUT   Path to write misspelled file to  [required]
 
 Options:
-  --target TEXT  Alphabet to map to.  [default: latin]
-  --source TEXT  Alphabet to map from.  [default: latin]
-  --lang TEXT    Language for keyboard layout  [default: en]
+  --target TEXT  Alphabet to map to.  [default: l1]
+  --source TEXT  Alphabet to map from.  [default: l1]
   --help         Show this message and exit.
 ```
 
@@ -75,7 +74,8 @@ Options:
   --prefix TEXT        Prefix to add to all the files  [default: translit]
   --target TEXT        Alphabet to map to.  [default: latin]
   --source TEXT        Alphabet to map from.  [default: latin]
-  --lang TEXT          Language for keyboard layout  [default: en]
+  --out-path PATH      Directory where the data and test subdirectories will
+                       be created.  [default: ./]
   --help               Show this message and exit.
 ```
 

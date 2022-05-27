@@ -15,13 +15,13 @@ Commands:
 
 ![](../images/confirm.png)
 
-## `taipo keyboard logistic`
+## `taipo confirm logistic`
 
-This command trains a basic countvector model
+This command trains a basic logistic regression model
 and runs it against one of your `nlu.yml` files.
 
 ```
-> taipo keyboard logistic --help
+> taipo confirm logistic --help
 Usage: confirm logistic [OPTIONS] MODEL_PATH NLU_PATH [OUT_PATH]
 
   Confirm via basic sklearn pipeline.
@@ -53,13 +53,13 @@ the confidence that the model had while making the prediction. When a model
 shows high confidence on a wrong label, it deserves priority.
 
 
-## `taipo keyboard rasa-model`
+## `taipo confirm rasa-model`
 
 This command takes a pretrained Rasa model and runs it against one of
 your nlu.yml files.
 
 ```
-> taipo keyboard rasa-model --help
+> taipo confirm rasa-model --help
 Usage: confirm rasa-model [OPTIONS] MODEL_PATH NLU_PATH [OUT_PATH]
 
   Confirm via trained Rasa pipeline.

@@ -80,6 +80,8 @@ Options:
   --char-max INTEGER    Max number of chars to change per line  [default: 3]
   --word-max INTEGER    Max number of words to change per line  [default: 3]
   --lang TEXT           Language for keyboard layout  [default: en]
+  --out-path PATH       Directory where the data and test subdirectories will
+                        be created.  [default: ./]
   --help                Show this message and exit.
 ```
 
