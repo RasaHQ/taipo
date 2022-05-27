@@ -78,7 +78,7 @@ def test_translit_generate(tmp_path: str):
     cmd = [
         "translit",
         "generate",
-        "data/nlu-orig.yml",
+        "tests/data/nlu/nlu.yml",
         "--prefix",
         "translated",
         "--target",
