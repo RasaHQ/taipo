@@ -1,7 +1,9 @@
 import asyncio
 import copy
+import os
 import re
-from typing import List, Dict, Optional, Tuple, Set, Callable
+from pathlib import Path
+from typing import List, Dict, Optional, Tuple, Set, Callable, Union
 
 import numpy as np
 import pandas as pd
@@ -36,7 +38,7 @@ def split_uniformly(
     return df.iloc[train_indices].copy(), df.iloc[test_indices].copy()
 
 
-def nlu_path_to_dataframe(path: str) -> pd.DataFrame:
+def nlu_path_to_dataframe(path: Union[str, Path]) -> pd.DataFrame:
     """Converts a single nlu file with intents into a dataframe.
 
     Args:
@@ -45,8 +47,11 @@ def nlu_path_to_dataframe(path: str) -> pd.DataFrame:
         dataframe with the loaded nlu data, containing columns for text, intent,
         and entities.
     """
+    if not os.path.isfile(path):
+        # because Rasa won't complain
+        raise ValueError(f"Expected a file at: {path}.")
     importer = TrainingDataImporter.load_from_dict(
-        training_data_paths=[path], domain_path=None
+        training_data_paths=[str(path)], domain_path=None
     )
     nlu_data = asyncio.run(importer.get_nlu_data())
 

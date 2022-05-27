@@ -1,7 +1,6 @@
 import os
 import pathlib
 import re
-import shutil
 
 import pytest
 from typer.testing import CliRunner
@@ -13,24 +12,23 @@ runner = CliRunner()
 
 
 @pytest.mark.parametrize(
-    "path_in,path_out", [("nlu.yml", "nlu.yml"), ("foobar.yml", "foobar.yml")]
+    "path_in,path_out", [("nlu.yml", "nlu-out.yml"), ("foobar.yml", "foobar-out.yml")]
 )
-def test_keyboard_augment(tmp_path, path_in, path_out):
+def test_keyboard_augment(tmp_path: pathlib.Path, path_in: str, path_out: str):
     """Ensure basic usage of command works."""
     cmd = [
         "keyboard",
         "augment",
         "tests/data/nlu/nlu.yml",
-        f"{tmp_path}/{path_in}",
+        f"{tmp_path}/{path_out}",
     ]
     result = runner.invoke(app, cmd)
-    print(result.stdout)
     assert result.exit_code == 0
     expected = nlu_path_to_dataframe("tests/data/nlu/nlu.yml").shape
     assert nlu_path_to_dataframe(f"{tmp_path}/{path_out}").shape == expected
 
 
-def test_keyboard_augment_keeps_annotations(tmp_path):
+def test_keyboard_augment_keeps_annotations(tmp_path: pathlib.Path):
     """Ensure the format of entity annotations is kept correctly."""
     cmd = [
         "keyboard",
