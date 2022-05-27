@@ -1,12 +1,11 @@
 import os
+import pathlib
 import warnings
-
 
 # Turn off annoying Tensorflow logs
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 import typer
-import pathlib
 import numpy as np
 import pandas as pd
 import tensorflow as tf  # noqa
@@ -18,8 +17,12 @@ from sklearn.linear_model import LogisticRegression
 from rasa.cli.utils import get_validated_path
 from rasa.core.interpreter import RasaNLUInterpreter
 from rasa.model import get_model, get_model_subdirectories
+from rasa.shared.nlu.constants import (
+    INTENT,
+    TEXT,
+)
 
-from taipo.common import nlu_path_to_dataframe, replace_ent_assignment
+from taipo import common
 
 
 app = typer.Typer(
@@ -53,25 +56,23 @@ def rasa_model(
     print("[green]Loading Interpreter.")
     interpreter = load_interpreter(model_path)
     print("[green]Loading NLU file.")
-    df = nlu_path_to_dataframe(nlu_path).assign(
-        clean_text=lambda d: replace_ent_assignment(d["text"])
-    )
+    df = common.nlu_path_to_dataframe(nlu_path)
 
     # Make predictions.
     parsed_examples = []
     with Progress() as progress:
         task = progress.add_task("[green]Making predictions...", total=df.shape[0])
-        for text in df["clean_text"]:
-            parsed_examples.append(interpreter.interpreter.parse(text)["intent"])
+        for text in df[TEXT]:
+            parsed_examples.append(interpreter.interpreter.parse(text)[INTENT])
             progress.update(task, advance=1)
     pred_df = pd.DataFrame(parsed_examples)
 
     # Save the suggestions
     (
         df.assign(pred_intent=pred_df["name"], confidence=pred_df["confidence"])
-        .loc[lambda d: d["intent"] != d["pred_intent"]]
+        .loc[lambda d: d[INTENT] != d["pred_intent"]]
         .sort_values("confidence", ascending=False)[
-            ["text", "intent", "pred_intent", "confidence"]
+            [TEXT, INTENT, "pred_intent", "confidence"]
         ]
         .to_csv(out_path, index=False)
     )
@@ -86,9 +87,7 @@ def logistic(
     ),
 ):
     """Confirm via basic sklearn pipeline."""
-    df = nlu_path_to_dataframe(nlu_path).assign(
-        clean_text=lambda d: replace_ent_assignment(d["text"])
-    )
+    df = common.nlu_path_to_dataframe(nlu_path)
 
     print("[green]Training basic pipeline.")
     mod = make_pipeline(
@@ -96,18 +95,18 @@ def logistic(
         LogisticRegression(solver="liblinear", class_weight="balanced"),
     )
 
-    mod.fit(df["clean_text"], df["intent"])
+    mod.fit(df[TEXT], df[INTENT])
 
     print("[green]Checking labels.")
     # Save the suggestions
     (
         df.assign(
-            pred_intent=mod.predict(df["clean_text"]),
-            confidence=np.max(mod.predict_proba(df["clean_text"]), axis=1),
+            pred_intent=mod.predict(df[TEXT]),
+            confidence=np.max(mod.predict_proba(df[TEXT]), axis=1),
         )
-        .loc[lambda d: d["intent"] != d["pred_intent"]]
+        .loc[lambda d: d[INTENT] != d["pred_intent"]]
         .sort_values("confidence", ascending=False)[
-            ["text", "intent", "pred_intent", "confidence"]
+            [TEXT, INTENT, "pred_intent", "confidence"]
         ]
         .to_csv(out_path, index=False)
     )

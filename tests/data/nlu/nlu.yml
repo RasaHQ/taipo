@@ -12,6 +12,7 @@ nlu:
     - Code to ask yes/no question in [javascript](proglang)
     - Executing [JavaScript](proglang) from Flex: Is this [javascript](proglang) function dangerous?
     - What does this [python](proglang) error mean?
+    - What does this [python]{"entity": "language", "role" : "some-role"} error mean?
 - regex: account_number
   examples: |
     - \d{10,12}

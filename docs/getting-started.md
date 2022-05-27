@@ -99,7 +99,7 @@ rasa train nlu --nlu nlu/nlu.yml --fixed-model-name orig
 Once this model is trained, you can finetune it on the misspelled data.
 
 ```
-rasa train nlu --nlu nlu/nlu.yml \
+rasa train nlu --nlu nlu/typo-nlu.yml \
                --finetune models/orig.tar.gz \
                --epoch-fraction 0.1 \
                --fixed-model-name finetuned
